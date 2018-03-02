@@ -14,15 +14,16 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
         { "!=" , (Variable<int> a, Variable<int> b) => { return a != b; } },
         { ">=" , (Variable<int> a, Variable<int> b) => { return a >= b; } },
         { "<=" , (Variable<int> a, Variable<int> b) => { return a <= b; } },
-
     };
 
 
     public abstract class LogicalOperationNode : BinaryOperationNode, ISyntaxNode{
 
+       
         public bool didPass()
         {
             return logicalOperations[theOperator](operand1,operand2);
         }
+    
     }
 }

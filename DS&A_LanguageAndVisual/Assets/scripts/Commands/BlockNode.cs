@@ -4,6 +4,8 @@ using DataStructureLanguage.Syntax.Util.Variable;
 
 namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
+
+    //Not really needed anymore cause node's don't have bodies just traversing tree
     public class BlockNode 
     {
         //Block node will have it's own set of variables that are only in this environment
