@@ -10,15 +10,37 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
 
         //For loops when they hit leaf, then go back to scope and execute that, later on will also be used for functions and the like
         BlockNode scope;
-        //At most 2, because not possible to diverge to two different blocknodes at the same level
-        //either continue with current body or transition into new one
-        SyntaxNode[] children;
 
-        
-       
+        SyntaxNode left;
+        SyntaxNode right;
+
+
         public SyntaxNode()
         {
-            children = new SyntaxNode[2];
         }
+
+
+        public void setLeftChild(SyntaxNode child)
+        {
+            left = node;
+        }
+
+        public void setRightChild(BlockNode child)
+        {
+            right = child;
+        }
+
+        public SyntaxNode leftChild()
+        {
+            return left;
+        }
+
+        public BlockNode rightChild()
+        {
+            return (BlockNode)right;
+        }
+
+
+       
     }
 }
