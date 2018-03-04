@@ -20,7 +20,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
 
     public abstract class LogicalOperationNode : BinaryOperationNode, ISyntaxNode{
 
-        public bool didPass()
+        public new bool operate()
         {
             return logicalOperations[theOperator](operand1,operand2);
         }

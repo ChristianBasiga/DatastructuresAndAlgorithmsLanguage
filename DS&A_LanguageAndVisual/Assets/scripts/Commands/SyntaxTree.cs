@@ -48,7 +48,6 @@ namespace DataStructureLanguage.Syntax.Util
                     }
                     else 
                         traverseLeft();
-
                 }
                 else
                 {

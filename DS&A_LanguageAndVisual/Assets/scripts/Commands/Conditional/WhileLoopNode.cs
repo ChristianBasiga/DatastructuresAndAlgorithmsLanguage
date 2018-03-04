@@ -7,7 +7,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
     {
         bool isDone()
         {
-            return !didPass();
+            return !operate();
         }
     }
 }
