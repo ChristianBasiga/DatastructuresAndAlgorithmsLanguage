@@ -1,18 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-
+using DataStructureLanguage.Syntax.SyntaxNodes;
 namespace DataStructureLanguage.Syntax.Util
 {
     //Note: I am not commenting any of this for a reason, it should make perfect sense.
     public class SyntaxTree
     {
-        DataStructureLanguage.Syntax.SyntaxNode root;
-        DataStructureLanguage.Syntax.SyntaxNode current;
+        SyntaxNode root;
+        SyntaxNode current;
 
         //To go back to from previous body, basically like a stackframe, except for any blocks
-        Stack<DataStructureLanguage.Syntax.SyntaxNode> prevBodies;
+        Stack<SyntaxNode> prevBodies;
 
-        public SyntaxTree(DataStructureLanguage.Syntax.SyntaxNode root)
+        public SyntaxTree(SyntaxNode root)
         {
             this.root = root;
             current = root;
@@ -28,22 +28,23 @@ namespace DataStructureLanguage.Syntax.Util
 
             BlockNode newBlock = current.rightChild();
             
-            if (newBlock is LogicalOperationNode)
+            if (newBlock is IConditional)
             {
-                LogicalOperationNode lop = (LogicalOperationNode)newBlock;
+                IConditional lop = (IConditional)newBlock;
 
                 if (!lop.didPass())
                 {
                     if (lop is IfElseNode)
                     {
-                        if (lop.Else == null)
+                        IfElseNode ifElse = (IfElseNode)lop;
+                        if (ifElse.Else == null)
                         {
                             traverseLeft();
                         }
                         else
                         {
                             prevBodies.Push(current);
-                            current = lop.Else;
+                            current = ifElse.Else;
                         }
                     }
                     else 
@@ -67,7 +68,7 @@ namespace DataStructureLanguage.Syntax.Util
                 SyntaxNode prev = prevBodies.Peek();
                 prevBodies.Pop();
 
-                current.modifyLeftChild(prev);
+                current.setLeftChild(prev);
             }
         }
     }

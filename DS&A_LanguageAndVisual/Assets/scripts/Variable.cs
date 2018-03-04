@@ -6,12 +6,12 @@ using UnityEngine;
 namespace DataStructureLanguage.Syntax.Util
 {
     //This will be used by view and model,
-    public class Variable<T> : MonoBehaviour
+    public class Variable : MonoBehaviour
     {
 
-        T value;
+        int value;
 
-        public T Value
+        public int Value
         {
             get { return value; }
             set
@@ -21,33 +21,33 @@ namespace DataStructureLanguage.Syntax.Util
         }
 
 
-        public static bool operator <(Variable<T> a, Variable<T> b)
+        public static bool operator <(Variable a, Variable b)
         {
             return a.Value < b.Value;
 
         }
 
-        public static bool operator >(Variable<T> a, Variable<T> b)
+        public static bool operator >(Variable a, Variable b)
         {
             return a.Value > b.Value;
         }
 
-        public static bool operator ==(Variable<T> a, Variable<T> b)
+        public static bool operator ==(Variable a, Variable b)
         {
             return a.Value == b.Value;
 
         }
-        public static bool operator !=(Variable<T> a, Variable<T> b)
+        public static bool operator !=(Variable a, Variable b)
         {
             return a.Value != b.Value;
 
         }
-        public static bool operator >=(Variable<T> a, Variable<T> b)
+        public static bool operator >=(Variable a, Variable b)
         {
             return a.Value >= b.Value;
 
         }
-        public static bool operator <=(Variable<T> a, Variable<T> b)
+        public static bool operator <=(Variable a, Variable b)
         {
             return a.Value <= b.Value;
 

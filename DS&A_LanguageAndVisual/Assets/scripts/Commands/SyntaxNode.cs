@@ -22,7 +22,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
 
         public void setLeftChild(SyntaxNode child)
         {
-            left = node;
+            left = child;
         }
 
         public void setRightChild(BlockNode child)

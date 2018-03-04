@@ -3,11 +3,21 @@ using System.Collections.Generic;
 
 namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
-    public class WhileLoopNode : LogicalOperationNode,ILoop
+    public class WhileLoopNode : BlockNode,ILoop,IConditional
     {
-        bool isDone()
+
+
+        LogicalOperationNode condition;
+
+        public bool isDone()
         {
-            return !operate();
+            return !didPass();
+        }
+
+        public bool didPass()
+        {
+            return condition.operate();
+
         }
     }
 }

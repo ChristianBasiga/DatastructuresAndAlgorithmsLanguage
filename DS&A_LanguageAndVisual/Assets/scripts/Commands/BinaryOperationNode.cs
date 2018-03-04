@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DataStructureLanguage.Syntax.Util;
 namespace DataStructureLanguage.Syntax.SyntaxNodes
 { 
 
@@ -10,14 +10,14 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
     public class BinaryOperationNode : SyntaxNode
     {
         //For now just int as operands, 
-        Variable<int> operand1;
-        Variable<int> operand2;
-        string theOperator;
+        protected Variable operand1;
+        protected Variable operand2;
+        protected string theOperator;
 
 
-        public void operate()
+        public bool operate()
         {
-
+            return true;
         }
     }
 }

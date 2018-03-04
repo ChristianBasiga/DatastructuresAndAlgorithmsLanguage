@@ -1,28 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DataStructureLanguage.Syntax.Util;
+
 
 namespace DataStructureLanguage.Syntax.SyntaxNodes {
 
-    public delegate bool LogicalOperation(Variable<int> a, Variable<int> b);
+    public delegate bool LogicalOperation(Variable a, Variable b);
 
-    public static Dictionary<string, LogicalOperation> logicalOperations = new Dictionary<char, LogicalOperation>()
-    {
+   
 
-        { "<" , (Variable<int> a, Variable<int> b) => { return a < b; } },
-        { ">" , (Variable<int> a, Variable<int> b) => { return a > b; } },
-        { "==" , (Variable<int> a, Variable<int> b) => { return a == b; } },
-        { "!=" , (Variable<int> a, Variable<int> b) => { return a != b; } },
-        { ">=" , (Variable<int> a, Variable<int> b) => { return a >= b; } },
-        { "<=" , (Variable<int> a, Variable<int> b) => { return a <= b; } },
-    };
-
-
-    public abstract class LogicalOperationNode : BinaryOperationNode, ISyntaxNode{
+    public abstract class LogicalOperationNode : BinaryOperationNode{
 
        
-        public bool didPass()
+        public bool operate()
         {
-            return logicalOperations[theOperator](operand1,operand2);
+            return Operators.logicalOperations[theOperator](operand1,operand2);
         }
     
     }

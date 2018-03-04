@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
-    public class ForLoopNode : LogicalOperationNode, ILoop
+    public class ForLoopNode : BlockNode, ILoop
     {
         int counter;
         int reps;
@@ -15,7 +15,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
             counter = 0;
         }
 
-        bool isDone()
+        public bool isDone()
         {
             return counter >= reps;
         }
