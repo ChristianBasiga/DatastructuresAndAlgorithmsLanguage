@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
-    public class ForLoopNode : BlockNode, ILoop
+    public class ForLoopNode : BlockNode, IConditional
     {
         int counter;
         int reps;
@@ -15,9 +15,12 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
             counter = 0;
         }
 
-        public bool isDone()
+        //Can just keep re-using didPass, I'm retarded yo.
+        public bool didPass()
         {
-            return counter >= reps;
+            bool result = reps < counter;
+            reps += 1;
+            return result;
         }
     }
 }

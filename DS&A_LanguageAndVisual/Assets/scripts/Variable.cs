@@ -53,6 +53,37 @@ namespace DataStructureLanguage.Syntax.Util
 
         }
 
+        public static Variable operator+(Variable a, Variable b)
+        {
+            Variable c = new Variable();
+            c.value = a.value + b.value;
+            return c;
+        }
+        public static Variable operator -(Variable a, Variable b)
+        {
+            Variable c = new Variable();
+            c.value = a.value - b.value;
+            return c;
+        }
+        public static Variable operator /(Variable a, Variable b)
+        {
+            Variable c = new Variable();
+            c.value = a.value / b.value;
+            return c;
+        }
+        public static Variable operator *(Variable a, Variable b)
+        {
+            Variable c = new Variable();
+            c.value = a.value * b.value;
+            return c;
+        }
+        public static Variable operator %(Variable a, Variable b)
+        {
+            Variable c = new Variable();
+            c.value = a.value % b.value;
+            return c;
+        }
+
     }
 
     
