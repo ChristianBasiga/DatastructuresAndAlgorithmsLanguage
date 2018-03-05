@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DataStructureLanguage.Syntax.SyntaxNodes;
+
 namespace DataStructureLanguage.Syntax.Util
 {
     //Note: I am not commenting any of this for a reason, it should make perfect sense.
@@ -9,8 +10,8 @@ namespace DataStructureLanguage.Syntax.Util
         SyntaxNode root;
         SyntaxNode current;
 
-        //To go back to from previous body, basically like a stackframe, except for any blocks
-        Stack<SyntaxNode> prevBodies;
+        //To go back to from current body, basically a stackframe, everytime enters new block we push that new blck into this body and top of it is block we are currently in
+        Stack<SyntaxNode> bodies;
 
 
         public SyntaxTree(SyntaxNode root)
@@ -26,10 +27,11 @@ namespace DataStructureLanguage.Syntax.Util
         public void start()
         {
             current = root;
+            bodies.Push(current);
         }
 
         //I hate the forElse parameter but fuck it man to make it work for now.
-        public void add(SyntaxNode node, int bodiesDeep, bool forElse = false)
+        public void add(SyntaxNode node, List<int> bodies, bool forElse = false)
         {
             if (root == null)
             {
@@ -37,27 +39,33 @@ namespace DataStructureLanguage.Syntax.Util
                 return;
             }
             current = root;
-            int bodiesTraversed = 0;
-            while (bodiesTraversed < bodiesDeep || current.leftChild() != null)
+            //bodies length is how many bodies deep we wre taking current, with body line being which body we're traversing to, for easier sakes could just say line count instead
+            //since gotta traverse everything anyway, instead of checking if has a right node, though I could do that, I'll write it in and try both ways.
+            foreach (int bodyLine in bodies)
             {
-                if (current.rightChild() != null && bodiesTraversed < bodiesDeep)
-                {
-                    current = current.rightChild();
-                    bodiesTraversed += 1;
-                }
-                else
+                //Then traverse left to that body line, then traverse right, to enter that body, then repeat process to get to correct node.
+                for (int i = 0; i < bodyLine; ++i)
                 {
                     current = current.leftChild();
                 }
+
+                current = current.rightChild();
             }
 
             bool toRight = node is BlockNode;
 
             SyntaxNode toAttach = current;
             if (current is IfElseNode && forElse)
-            {             
-                    IfElseNode ifElse = (IfElseNode)current;
+            {
+                IfElseNode ifElse = (IfElseNode)current;
+
+                if (ifElse.elseBody == null)
+                    ifElse.elseBody = node;
+                else
+                {
                     toAttach = ifElse.elseBody;
+                }
+
             }
             else
             {
@@ -99,8 +107,9 @@ namespace DataStructureLanguage.Syntax.Util
                         }
                         else
                         {
-                            prevBodies.Push(current);
                             current = ifElse.Else;
+                            bodies.Push(current);
+
                         }
                     }
                     else 
@@ -108,8 +117,8 @@ namespace DataStructureLanguage.Syntax.Util
                 }
                 else
                 {
-                    prevBodies.Push(current);
                     current = newBlock;
+                    bodies.Push(current);
                 }
             }
        
@@ -119,19 +128,30 @@ namespace DataStructureLanguage.Syntax.Util
         {
             current = current.leftChild();
 
-            if (current.leftChild() == null)
+            if (current == null)
             {
-                SyntaxNode prev = prevBodies.Peek();
+                SyntaxNode prev = bodies.Peek();
                 if (prev == null)
                 {
                     return;
                 }
-                prevBodies.Pop();
 
-                current.setLeftChild(prev);
+                if (prev is IConditional)
+                {
+                    IConditional conditional = (IConditional)prev;
+                    //So that it sees fi should go right again or just goes left.
+                    if (conditional.Type == "loop")
+                        current = prev.getParent();
+                   
+                }
+                //If it's not a loop then just goes to left node of parent
+                else
+                {
+                    current = prev.getParent().leftChild();
+                }
+
+                bodies.Pop();
             }
-
-
         }
     }
 }

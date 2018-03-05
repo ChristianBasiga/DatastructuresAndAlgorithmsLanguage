@@ -8,11 +8,13 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
     {
         int counter;
         int reps;
+        string type;
 
         public ForLoopNode(int reps)
         {
             this.reps = reps;
             counter = 0;
+            type = "loop";
         }
 
         //Can just keep re-using didPass, I'm retarded yo.
@@ -22,5 +24,14 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
             reps += 1;
             return result;
         }
+
+        public string Type
+        {
+            get
+            {
+                return type;
+            }
+        }
+
     }
 }

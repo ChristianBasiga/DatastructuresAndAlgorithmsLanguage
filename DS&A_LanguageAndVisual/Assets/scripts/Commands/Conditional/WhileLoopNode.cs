@@ -12,7 +12,12 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
     {
         public WhileLoopNode(Variable first, Variable second, string operation): base(first, second, operation)
         {
-            
+
+
+            type = "Loop";
+           
         }
+
+
     }
 }

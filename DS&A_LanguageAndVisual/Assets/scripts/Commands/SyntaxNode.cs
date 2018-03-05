@@ -19,6 +19,10 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
         {
         }
 
+        public SyntaxNode getParent()
+        {
+            return parent;
+        }
 
         public void setLeftChild(SyntaxNode child)
         {

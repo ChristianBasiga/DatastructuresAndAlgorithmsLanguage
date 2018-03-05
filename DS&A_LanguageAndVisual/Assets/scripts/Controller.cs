@@ -10,7 +10,7 @@ public class Controller : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        SyntaxTree tree = new SyntaxTree();
+        DataStructureLanguage.Syntax.Util.SyntaxTree tree = new DataStructureLanguage.Syntax.Util.SyntaxTree();
 		
 	}
 	

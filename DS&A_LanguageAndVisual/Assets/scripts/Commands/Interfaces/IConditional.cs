@@ -6,7 +6,7 @@ public interface IConditional
 {
 
     bool didPass();
-
+    string Type { get; }
 
 }
 
