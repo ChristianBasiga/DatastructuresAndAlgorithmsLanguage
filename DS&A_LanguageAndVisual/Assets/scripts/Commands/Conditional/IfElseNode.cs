@@ -10,6 +10,12 @@ using DataStructureLanguage.Syntax.Util;
         Operators.LogicalOperation condition;
 
         public SyntaxNode elseBody;
+
+        public IfElseNode()
+        {
+            type = "ifelse";
+        }
+
         //Problem with that is I actually restrict it to having to have two operands and an operator.
         //Which is retarded, because !d is a thing, though I could translate that to != false to though like actually.
         //Fuck it getting working,meant to make complete but just make shitty in different way? Same overloads same attributes yet no relation between them

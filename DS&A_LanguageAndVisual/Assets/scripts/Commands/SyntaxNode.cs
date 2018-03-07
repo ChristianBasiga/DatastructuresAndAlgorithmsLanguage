@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace DataStructureLanguage.Syntax.SyntaxNodes {
 
+    //I suppose at this point might as well make this just have operands, but will leave like this for now can change easily later on
     
     public class SyntaxNode {
 

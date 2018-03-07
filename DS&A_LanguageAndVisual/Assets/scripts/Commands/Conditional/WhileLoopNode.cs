@@ -10,6 +10,12 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
     //and that could be replaced with fucking string ids
     public class WhileLoopNode : IfNode
     {
+
+        public WhileLoopNode()
+        {
+            //
+            type = "Loop";
+        }
         public WhileLoopNode(Variable first, Variable second, string operation): base(first, second, operation)
         {
 

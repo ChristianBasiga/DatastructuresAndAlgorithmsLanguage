@@ -10,11 +10,30 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
         int reps;
         string type;
 
+
+        public ForLoopNode()
+        {
+            type = "for";
+        }
+
+
         public ForLoopNode(int reps)
         {
             this.reps = reps;
             counter = 0;
             type = "loop";
+        }
+
+        public int Reps
+        {
+            get
+            {
+                return reps;
+            }
+            set
+            {
+                reps = value;
+            }
         }
 
         //Can just keep re-using didPass, I'm retarded yo.
