@@ -18,10 +18,20 @@ public class BlockVisual : VisualNode {
         tail = null;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	public void append(VisualNode node)
+    {
+        VisualNode curr = head;
+
+        while (curr.next != null)
+        {
+            curr = curr.next;
+        }
+
+        curr.next = node;
+        node.next = null;
+    }
+
+    //This is why I need to make method for Next, so that I can override it, this is definitely high on TODO
 
     public void nextNode()
     {

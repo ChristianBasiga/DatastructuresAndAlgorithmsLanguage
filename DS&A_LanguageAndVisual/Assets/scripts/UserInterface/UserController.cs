@@ -25,7 +25,24 @@ namespace DataStructureLanguage.UserInterface
         void Start()
         {
             //Should work theoritically, see nothing wrong with logic, though do need to change it so set through property instead so I can trigger events of placement, like spacing with 
-            placeNode += (VisualNode toPlaceWith) => { toPlaceWith.Next = currentlyClicked; };
+            //This here works for most part but gotta make sure to make it slightly different if block visual
+            placeNode += (VisualNode toPlaceWith) => {
+
+                //So if it's a block node I want to attach it to head of that node not append to head of root node.
+                if (toPlaceWith is BlockVisual && toPlaceWith.gameObject.name == "head")
+                {
+                    //Need way to determine if inside body of block visual or not, I need the tail gameObject, and then that needs to have reference to BlockVisual, and it should be the same instance
+                    //look into that but check will just be this.
+                    BlockVisual visual = (BlockVisual)toPlaceWith;
+                    visual.append(currentlyClicked);
+                }
+                else
+                {
+
+                    toPlaceWith.next = currentlyClicked;
+                }
+
+            };
         }
 
         // Update is called once per frame
@@ -39,7 +56,7 @@ namespace DataStructureLanguage.UserInterface
                 if (touch.phase == TouchPhase.Ended) {
 
                     Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                    RayCastHit hit;
+                    RaycastHit hit;
 
                     if (Physics.Raycast(ray, out hit))
                     {
@@ -48,11 +65,12 @@ namespace DataStructureLanguage.UserInterface
                             //So if hit visual Node then trigger the event OnClick
                             if (hit.collider.gameObject.GetComponent<VisualNode>())
                             {
-                                OnClick(hit.collider.gameObject);
+                                OnClickedNode(hit.collider.gameObject);
                             }
                             else if (hit.collider.gameObject.name == "Compile")
                             {
 
+                                clickedCompile();
                             }
                         
                         }

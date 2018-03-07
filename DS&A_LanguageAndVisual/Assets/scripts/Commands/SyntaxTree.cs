@@ -52,9 +52,12 @@ namespace DataStructureLanguage.Syntax.Util
                 current = current.rightChild();
             }
 
+
+            //Below is just deciding if should go to left or right child, and checking if has an else
             bool toRight = node is BlockNode;
 
             SyntaxNode toAttach = current;
+            //I gotta rethink way I'm doing this part to make else works cause I hate it though it works
             if (current is IfElseNode && forElse)
             {
                 IfElseNode ifElse = (IfElseNode)current;

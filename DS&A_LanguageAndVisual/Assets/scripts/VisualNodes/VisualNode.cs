@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class VisualNode : MonoBehaviour {
 
     //Maybe make property later, fuck it for now.
-    public  VisualNode prev, next;
+    public VisualNode prev, next;
 
     List<int> lineNumbers;
 

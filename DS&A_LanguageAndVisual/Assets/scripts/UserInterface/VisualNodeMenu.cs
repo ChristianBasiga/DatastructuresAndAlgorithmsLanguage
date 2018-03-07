@@ -8,15 +8,15 @@ namespace DataStructureLanguage.UserInterface
     public class VisualNodeMenu : MonoBehaviour
     {
 
-        public int optionCount;
+        public readonly int  optionCount;
         //Instances of all kinds of visual nodes with default values, this will just be loading in prefabs and setting them inactive to active
-        GameObject[] previews = new VisualNode[optionCount]
+        GameObject[] previews = new GameObject[5]
         {
-            Instantiate(Resources.Load("Prefabs/VisualNodes/While") as GameObject,0,0),
-            Instantiate(Resources.Load("Prefabs/VisualNodes/For") as GameObject,0,0),
-            Instantiate(Resources.Load("Prefabs/VisualNodes/If") as GameObject,0,0),
-            Instantiate(Resources.Load("Prefabs/VisualNodes/IfElse") as GameObject,0,0),
-            Instantiate(Resources.Load("Prefabs/VisualNodes/BinaryOperation") as GameObject,0,0)
+            Instantiate(Resources.Load("Prefabs/VisualNodes/While") as GameObject,Vector3.zero,Quaternion.identity),
+            Instantiate(Resources.Load("Prefabs/VisualNodes/For") as GameObject,Vector3.zero,Quaternion.identity),
+            Instantiate(Resources.Load("Prefabs/VisualNodes/If") as GameObject,Vector3.zero,Quaternion.identity),
+            Instantiate(Resources.Load("Prefabs/VisualNodes/IfElse") as GameObject,Vector3.zero,Quaternion.identity),
+            Instantiate(Resources.Load("Prefabs/VisualNodes/BinaryOperation") as GameObject,Vector3.zero,Quaternion.identity)
 
         };
 
@@ -24,9 +24,9 @@ namespace DataStructureLanguage.UserInterface
 
         void Start()
         {
-            foreach (VisualNode node in previews)
+            foreach (GameObject node in previews)
             {
-                node.gameObject.SetActive(false);
+                gameObject.SetActive(false);
             }
 
             UserController uc = GameObject.Find("UserController").GetComponent<UserController>();
@@ -39,7 +39,7 @@ namespace DataStructureLanguage.UserInterface
         public void instantiateVisualNode(int optionIndex)
         {
             //Actually creating new insance of node, could just keep with preview values insead of making empty
-            GameObject node = Instantiate(previews[optionIndex], 0, 0);
+            GameObject node = Instantiate(previews[optionIndex], Vector3.zero, Quaternion.identity);
 
             node.SetActive(true);
 
