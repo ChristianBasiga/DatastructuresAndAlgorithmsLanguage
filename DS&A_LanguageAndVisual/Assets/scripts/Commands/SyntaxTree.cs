@@ -13,6 +13,11 @@ namespace DataStructureLanguage.Syntax.Util
         //To go back to from current body, basically a stackframe, everytime enters new block we push that new blck into this body and top of it is block we are currently in
         Stack<SyntaxNode> bodies;
 
+        //Variables for SyntaxTree of this program, see makes sense to be here and can be public cause fill be emptied everytime re-run program;
+        public Dictionary<string, Variable> variables;
+
+
+
 
         public SyntaxTree(SyntaxNode root)
         {
@@ -27,6 +32,8 @@ namespace DataStructureLanguage.Syntax.Util
         public void start()
         {
             current = root;
+            //Cause new program is starting to allocate memory for this program to run.
+            variables = new Dictionary<string, Variable>();
             bodies.Push(current);
         }
 
@@ -81,6 +88,7 @@ namespace DataStructureLanguage.Syntax.Util
 
         }
 
+        //This is all body transferring
         public void traverseRight()
         {
             if (current.rightChild() == null)
@@ -95,7 +103,7 @@ namespace DataStructureLanguage.Syntax.Util
             {
                 IConditional lop = (IConditional)newBlock;
 
-                if (!lop.didPass())
+                if (!lop.didPass(this))
                 {
                     if (lop is IfElseNode)
                     {
@@ -124,6 +132,7 @@ namespace DataStructureLanguage.Syntax.Util
        
         }
 
+        //This is for executing other statements
         public void traverseLeft()
         {
             current = current.leftChild();
@@ -151,6 +160,12 @@ namespace DataStructureLanguage.Syntax.Util
                 }
 
                 bodies.Pop();
+            }
+            else if (current is IExecute)
+            {
+                IExecute executable = (IExecute)current;
+                executable.execute(this);
+
             }
         }
     }

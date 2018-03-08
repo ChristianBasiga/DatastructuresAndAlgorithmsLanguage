@@ -8,6 +8,7 @@ namespace DataStructureLanguage.Syntax.Util
     public class Variable 
     {
 
+        public readonly string name;
         int value;
 
         public int Value
@@ -17,6 +18,11 @@ namespace DataStructureLanguage.Syntax.Util
             {
                 this.value = value;
             }
+        }
+
+        public Variable(string name)
+        {
+            this.name = name;
         }
 
 
@@ -54,31 +60,32 @@ namespace DataStructureLanguage.Syntax.Util
 
         public static Variable operator+(Variable a, Variable b)
         {
-            Variable c = new Variable();
+            //Making a literal
+            Variable c = new Variable(null);
             c.value = a.value + b.value;
             return c;
         }
         public static Variable operator -(Variable a, Variable b)
         {
-            Variable c = new Variable();
+            Variable c = new Variable(null);
             c.value = a.value - b.value;
             return c;
         }
         public static Variable operator /(Variable a, Variable b)
         {
-            Variable c = new Variable();
+            Variable c = new Variable(null);
             c.value = a.value / b.value;
             return c;
         }
         public static Variable operator *(Variable a, Variable b)
         {
-            Variable c = new Variable();
+            Variable c = new Variable(null);
             c.value = a.value * b.value;
             return c;
         }
         public static Variable operator %(Variable a, Variable b)
         {
-            Variable c = new Variable();
+            Variable c = new Variable(null);
             c.value = a.value % b.value;
             return c;
         }

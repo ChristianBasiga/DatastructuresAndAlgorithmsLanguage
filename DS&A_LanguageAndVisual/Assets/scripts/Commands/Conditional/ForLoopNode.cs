@@ -37,8 +37,9 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
         }
 
         //Can just keep re-using didPass, I'm retarded yo.
-        public bool didPass()
+        public bool didPass(DataStructureLanguage.Syntax.Util.SyntaxTree syntaxTree)
         {
+            //Don't really need the tree here, test everthing else then rework this to fit rest of framework
             bool result = reps < counter;
             reps += 1;
             return result;

@@ -16,7 +16,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
             //
             type = "Loop";
         }
-        public WhileLoopNode(Variable first, Variable second, string operation): base(first, second, operation)
+        public WhileLoopNode(string first, string second, string operation): base(first, second, operation)
         {
 
 

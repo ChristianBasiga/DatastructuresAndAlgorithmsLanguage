@@ -15,6 +15,8 @@ public class Operators {
     {
 
         //Need to overload these operators, that or just do operatiosn here but overloading looks cleaner
+        //Should the check for existance happen here?
+
         {"=" ,  (Variable assignee, Variable value) => { assignee = value; } },
          //Will just do this for now, rest are extra shit.
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public interface IConditional
 {
 
-    bool didPass();
+    bool didPass(DataStructureLanguage.Syntax.Util.SyntaxTree syntaxTree);
     string Type { get; }
 
 }

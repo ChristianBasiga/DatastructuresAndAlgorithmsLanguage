@@ -5,12 +5,14 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
 
     //I suppose at this point might as well make this just have operands, but will leave like this for now can change easily later on
     
-    public class SyntaxNode {
+    //Not every syntax node executes, I could make it like this but it'll probably end up like my iOS project.
+    public abstract class SyntaxNode {
 
         SyntaxNode parent;
 
         //For loops when they hit leaf, then go back to scope and execute that, later on will also be used for functions and the like
         BlockNode scope;
+
 
         SyntaxNode left;
         SyntaxNode right;
@@ -44,7 +46,6 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
         {
             return (BlockNode)right;
         }
-
 
        
     }

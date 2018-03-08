@@ -20,7 +20,7 @@ using DataStructureLanguage.Syntax.Util;
         //Which is retarded, because !d is a thing, though I could translate that to != false to though like actually.
         //Fuck it getting working,meant to make complete but just make shitty in different way? Same overloads same attributes yet no relation between them
         //Unless I make an If , then IfElse, I mean slack does it and it worked for me in iOS so why not.
-        public IfElseNode(Variable first, Variable second, string operation) : base(first, second, operation)
+        public IfElseNode(string first, string second, string operation) : base(first, second, operation)
         {
         }
 
