@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BlockVisual : VisualNode {
 
@@ -13,6 +14,8 @@ public class BlockVisual : VisualNode {
     VisualNode current;
     VisualNode tail;
 
+    public Text label;
+
     //Don't need attribute for tailGraphic, just part of prefab
 
 
@@ -21,6 +24,7 @@ public class BlockVisual : VisualNode {
 
         //Basically every VisualNode will traceback until they find BlockNode, then that's their scope.
         //Tbh it's only needed for Else, but I'll find other uses and it seems like would be useful for extending this later on
+        head = transform.GetChild(0).GetComponent<VisualNode>();
         head.Prev = this;
 
         head = current;

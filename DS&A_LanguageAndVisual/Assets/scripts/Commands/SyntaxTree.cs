@@ -27,6 +27,7 @@ namespace DataStructureLanguage.Syntax.Util
 
         public SyntaxTree()
         {
+            root = new BlockNode();
         }
 
         public void start()
@@ -37,7 +38,6 @@ namespace DataStructureLanguage.Syntax.Util
             bodies.Push(current);
         }
 
-        //I hate the forElse parameter but fuck it man to make it work for now.
         public void add(SyntaxNode node, List<int> bodies, bool forElse = false)
         {
             if (root == null)

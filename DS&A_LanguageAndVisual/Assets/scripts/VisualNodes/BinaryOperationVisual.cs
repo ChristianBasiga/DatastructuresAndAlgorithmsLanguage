@@ -15,11 +15,30 @@ public class BinaryOperationVisual : VisualNode {
 
     // Use this for initialization
 	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+        operators = transform.GetChild(0).GetComponent<Dropdown>();
+        firstOperand = transform.GetChild(1).GetComponent<InputField>().textComponent;
+        secondOperand = transform.GetChild(2).GetComponent<InputField>().textComponent;
+
+
+        operators.options.Clear();
+
+        foreach (string operation in Operators.arithmeticOperations.Keys)
+        {
+            Dropdown.OptionData data = new Dropdown.OptionData(operation);
+            operators.options.Add(data);
+        }
+
+
+        foreach (string operation in Operators.logicalOperations.Keys)
+        {
+            Dropdown.OptionData data = new Dropdown.OptionData(operation);
+            operators.options.Add(data);
+        }
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 }

@@ -41,7 +41,7 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
         //Representing how many levels deep lineNumber is in, basically the index.
         int lineDimension = 0;
 
-        do 
+        while (lineDimension > -1) 
         {
             //Now regadless if BlockVisual or not will still work as expected
             VisualNode next = current.Next;
@@ -60,6 +60,7 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
                 //Reset that spot for the next time enter new body.
                 lineNumbers[lineDimension] = 0;
 
+                lineDimension--;
                 frames.Pop();
             }
             else
@@ -83,7 +84,6 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
                     
             }
         }
-        while (frames.Count > 0);
 
     }
 
