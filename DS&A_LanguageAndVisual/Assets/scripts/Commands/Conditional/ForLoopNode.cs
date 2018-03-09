@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
+    /*
     public class ForLoopNode : BlockNode, IConditional
     {
         int counter;
@@ -54,4 +55,5 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
         }
 
     }
+    */
 }

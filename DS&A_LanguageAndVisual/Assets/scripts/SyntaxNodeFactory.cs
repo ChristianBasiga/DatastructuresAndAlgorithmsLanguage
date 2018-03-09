@@ -14,10 +14,6 @@ public class SyntaxNodeFactory
         {
             return new WhileLoopNode();
         }
-        else if (type == "for")
-        {
-            return new ForLoopNode();
-        }
         else if (type == "if")
         {
             return new IfNode();

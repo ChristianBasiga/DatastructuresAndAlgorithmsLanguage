@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 
 
+public enum ConditionalType
+{
+    LOOP,
+    IF,
+    IFELSE
+}
 public interface IConditional
 {
 
     bool didPass(DataStructureLanguage.Syntax.Util.SyntaxTree syntaxTree);
-    string Type { get; }
-
+    ConditionalType Type { get; }
 }
 

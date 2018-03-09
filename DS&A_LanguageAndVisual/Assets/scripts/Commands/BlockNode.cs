@@ -6,6 +6,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
 
     //Not really needed anymore cause node's don't have bodies just traversing tree
+    //Should I ahv type here? feel like
     public class BlockNode : SyntaxNode
     {
     

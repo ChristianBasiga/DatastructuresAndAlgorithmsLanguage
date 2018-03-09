@@ -6,9 +6,9 @@ using UnityEngine;
 public abstract class VisualNode : MonoBehaviour {
 
     //Maybe make property later, do thiss, I forgot why needed but is important
-    private VisualNode prev, next;
+    protected VisualNode prev, next;
 
-    public VisualNode Next
+    public virtual VisualNode Next
     {
         set
         {
@@ -20,7 +20,7 @@ public abstract class VisualNode : MonoBehaviour {
         }
     }
 
-    public VisualNode Prev
+    public virtual VisualNode Prev
     {
         set
         {
@@ -31,7 +31,6 @@ public abstract class VisualNode : MonoBehaviour {
             return prev;
         }
     }
-    List<int> lineNumbers;
 
     //Representing kind of Visual Node
     string id;

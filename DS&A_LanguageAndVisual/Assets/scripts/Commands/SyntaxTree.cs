@@ -151,8 +151,10 @@ namespace DataStructureLanguage.Syntax.Util
                 if (prev is IConditional)
                 {
                     IConditional conditional = (IConditional)prev;
-                    //So that it sees fi should go right again or just goes left.
-                    if (conditional.Type == "loop")
+
+                    //Right, it was for this reason, I mean I could just check if it's a loop tbh
+                    //problem with that is it's not easily extendable to more loops, cause I'll have to change this code.
+                    if (conditional.Type == ConditionalType.LOOP)
                         current = prev.getParent();
                    
                 }

@@ -33,11 +33,14 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
     public void scan()
     {
         VisualNode current = root;
-        //Purely to know when to stop.
-        Stack<VisualNode> frames = new Stack<VisualNode>();
-        //frames.Push(current);
 
-        //I think the next stuff here is fine
+        //To keep track of bodies.
+        Stack<BlockVisual> frames = new Stack<BlockVisual>();
+        List<int> lineNumbers = new List<int>();
+        lineNumbers.Add(0);
+        //Representing how many levels deep lineNumber is in, basically the index.
+        int lineDimension = 0;
+
         do 
         {
             //Now regadless if BlockVisual or not will still work as expected
@@ -45,30 +48,38 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
             if (next is BlockVisual)
             {
-                frames.Push(next);
+                frames.Push((BlockVisual)next);
                 current = next;
             }
+            //Because with how set up next in BlockVisual, when I set it to current it's current's next is now going to be null, then it'll go to actual
+            //next in outer body.
             else if (next == null)
             {
                 current = frames.Peek();
+
+                //Reset that spot for the next time enter new body.
+                lineNumbers[lineDimension] = 0;
+
                 frames.Pop();
             }
             else
             {
+                lineNumbers[lineDimension]++;
                 current = next;
             }
             SyntaxNode syntaxNode = constructSyntaxNode(current);
             if (syntaxNode != null)
             {
+                //What happens when you take breaks in between dev. I don't need to backtrace, the last added BlockVisual is the body of this current node.
+                //BlockVisual block = getOwningBody(syntaxNode);
+                BlockVisual block = frames.Peek();
 
-                BlockVisual block = getOwningBody(syntaxNode);
-
-                if (block.id == "else")
+                if (block.ID == "else")
                 {
-                    compiled.add(syntaxNode, current.lineNumbers, true);
+                    compiled.add(syntaxNode, lineNumbers, true);
                 }
                 else
-                    compiled.add(syntaxNode, current.lineNumbers);
+                    compiled.add(syntaxNode, lineNumbers);
                     
             }
         }
@@ -104,20 +115,9 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
                 {
                     //Throw an exception
                 }
-                //Move these three to a function, since duplicate code, but that's polish.
-                conditionalStatement.FirstOperand = condition.firstOperand.text;
-                conditionalStatement.SecondOperand = condition.secondOperand.text;
-                conditionalStatement.SetOperator(condition.operators.options[condition.operators.value].text);
 
-                ifBlock.SetCondition = conditionalStatement;
-
-            }
-            //Do this later, get working for minimum stuff
-            else if (node is ForLoopNode)
-            {
-                ForLoopNode flNode = (ForLoopNode)node;
-
-                //Set it's attributes with fields
+                convertBinaryOperation((BinaryOperationNode)conditionalStatement, (BinaryOperationVisual)e);
+                ifBlock.SetCondition(conditionalStatement);
             }
 
         }
@@ -140,9 +140,9 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
     {
         node.FirstOperand = binaryOperationVisual.firstOperand.text;
         node.SecondOperand = binaryOperationVisual.secondOperand.text;
-        node.SetOperator(binaryOperationVisual.operators.options[binaryOperationVisual.operators.value].text);
+        node.Operation = binaryOperationVisual.operators.options[binaryOperationVisual.operators.value].text;
     }
-
+    /* No longer needed, atleast for it's initial purpose for existing
     private BlockVisual getOwningBody(VisualNode visualNode)
     {
         //Trace back visual node to first BlockBody it sees, because that will be body it belongs to.
@@ -155,6 +155,6 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
         return (BlockVisual)current;
     }
-
+    */
 #endregion
 }

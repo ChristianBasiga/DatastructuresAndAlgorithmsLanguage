@@ -71,7 +71,7 @@ public class BlockVisual : VisualNode {
         }
 
         if (head != null)
-            visualNode.next = head.next;
+            visualNode.Next = head.Next;
 
         head = visualNode;
 
@@ -80,15 +80,15 @@ public class BlockVisual : VisualNode {
 	public void append(VisualNode node)
     {
         //Always start off at head's next
-        VisualNode curr = head.next;
+        VisualNode curr = head.Next;
 
-        while (curr.next != null)
+        while (curr.Next != null)
         {
-            curr = curr.next;
+            curr = curr.Next;
         }
 
-        curr.next = node;
-        node.next = null;
+        curr.Next = node;
+        node.Next = null;
     }
 
     //This is why I need to make method for Next, so that I can override it, this is definitely high on TODO
@@ -96,14 +96,14 @@ public class BlockVisual : VisualNode {
     //Have these already set, just change to nextChild to make explicit
     public VisualNode nextChild()
     {
-        current = current.next;
+        current = current.Next;
         return current;
 
     }
 
     public VisualNode prevChild()
     {
-        current = current.prev;
+        current = current.Prev;
         return current;
     }
 

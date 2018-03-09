@@ -13,16 +13,10 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
 
         public WhileLoopNode()
         {
-            //
-            type = "Loop";
-        }
-        public WhileLoopNode(string first, string second, string operation): base(first, second, operation)
-        {
+            type = ConditionalType.LOOP;
 
-
-            type = "Loop";
-           
         }
+  
 
 
     }

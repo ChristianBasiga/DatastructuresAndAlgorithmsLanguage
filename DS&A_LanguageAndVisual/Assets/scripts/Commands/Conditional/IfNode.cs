@@ -11,20 +11,22 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
     public class IfNode : BlockNode, IConditional
     {
         protected BinaryOperationNode condition;
-
+        protected ConditionalType type; 
 
         public IfNode()
         {
-            type = "if";
+            type = ConditionalType.IF;
         }
 
-        public IfNode(string first, string second, string operation)
+        public ConditionalType Type
         {
-            firstOperand = first;
-            secondOperand = second;
-            this.operation = operation;
-            type = "If";
+            get
+            {
+                return type;
+            }
         }
+
+       
 
         public void SetCondition(BinaryOperationNode condition)
         {
@@ -40,25 +42,17 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
             //Here check if the strings are numeric, if they are then just number, otherwise check for variable name in dictionary.
             try
             {
-                one = DataStructureLanguage.Syntax.Util.UtilMethods.ValidateOperand(firstOperand, syntaxTree);
-                two = DataStructureLanguage.Syntax.Util.UtilMethods.ValidateOperand(secondOperand, syntaxTree);
+                one = DataStructureLanguage.Syntax.Util.UtilMethods.ValidateOperand(condition.FirstOperand, syntaxTree);
+                two = DataStructureLanguage.Syntax.Util.UtilMethods.ValidateOperand(condition.SecondOperand, syntaxTree);
             }
             catch (System.Exception e)
             {
                 throw e;
             }
             //Does actual operation, returning the result. Todo: Do same in assignment node.
-            return Operators.logicalOperations[operation](one, two);
+            return Operators.logicalOperations[condition.Operation](one, two);
         }
 
-        //Move this to util
-       
-        public string Type
-        {
-            get
-            {
-                return type;
-            }
-        }
+     
     }
 }

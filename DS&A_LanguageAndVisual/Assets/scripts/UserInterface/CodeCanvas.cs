@@ -15,7 +15,7 @@ namespace DataStructureLanguage.UserInterface
         // Use this for initialization
         void Start()
         {
-            compiler = new Compiler(root.GetComponent<VisualNode>());
+            compiler = new Compiler(root.GetComponent<BlockVisual>());
             root = transform.GetChild(0).gameObject;
             UserController uc = GameObject.Find("UserController").GetComponent<UserController>();
 
