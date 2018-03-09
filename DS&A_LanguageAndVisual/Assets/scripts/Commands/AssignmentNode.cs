@@ -1,17 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DataStructureLanguage.Syntax.Util;
-
 namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
-    public class AssignmentNode : SyntaxNode, IExecute
+    public class AssignmentNode : BinaryOperationNode, IExecute
     {
-
-
-
-        string firstOperand;
-        string secondOperand;
-        string operation;
 
         //So it knows what variables structure to look through / insert into 
 
@@ -53,8 +46,6 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
 
         }
 
-        public string Operand1 { get { return firstOperand; } set { firstOperand = value; } }
-        public string Operand2 { get { return secondOperand; } set { secondOperand = value; } }
-        public string Operation { get { return operation; } set { operation = value; } }
+      
     }
 }

@@ -6,12 +6,11 @@ using DataStructureLanguage.Syntax.Util;
 
 namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
+    //Different, but still share same interface, sucks that duplicating this, but assignments aren't blocks
+    //I could make it so this one has a BinaryOperationNode, which would make sense
     public class IfNode : BlockNode, IConditional
     {
-        protected string firstOperand;
-        protected string secondOperand;
-        protected string operation;
-        protected string type;
+        protected BinaryOperationNode condition;
 
 
         public IfNode()
@@ -27,39 +26,10 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
             type = "If";
         }
 
-
-        public string FirstOperand
+        public void SetCondition(BinaryOperationNode condition)
         {
-            get
-            {
-                return firstOperand;
-            }
-            set
-            {
-                firstOperand = value;
-            }
-
+            this.condition = condition;
         }
-        public string SecondOperand
-        {
-            get
-            {
-                return secondOperand;
-            }
-            set
-            {
-                secondOperand = value;
-            }
-        }
-
-
-        public void SetOperator(string operation)
-        {
-            this.operation = operation;
-        }
-
-
-      
         //Unless instead of attribute, I just pass in the SyntaxTree so it knows where to look, that way I could possible reuse nodes. That might be better
         public bool didPass(DataStructureLanguage.Syntax.Util.SyntaxTree syntaxTree)
         {

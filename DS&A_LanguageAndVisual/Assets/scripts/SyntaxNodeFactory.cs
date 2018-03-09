@@ -27,7 +27,7 @@ public class SyntaxNodeFactory
             return new IfElseNode();
         }
 
-        return new SyntaxNode();
+        return new IfElseNode();
     }
 
 }

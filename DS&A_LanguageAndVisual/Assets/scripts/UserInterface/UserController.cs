@@ -39,7 +39,7 @@ namespace DataStructureLanguage.UserInterface
                 else
                 {
 
-                    toPlaceWith.next = currentlyClicked;
+                    toPlaceWith.Next = currentlyClicked;
                 }
 
             };
@@ -60,7 +60,7 @@ namespace DataStructureLanguage.UserInterface
 
                     if (Physics.Raycast(ray, out hit))
                     {
-                        if (hit != null)
+                        if (hit.collider != null)
                         {
                             //So if hit visual Node then trigger the event OnClick
                             if (hit.collider.gameObject.GetComponent<VisualNode>())

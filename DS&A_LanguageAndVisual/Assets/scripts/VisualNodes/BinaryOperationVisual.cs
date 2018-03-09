@@ -8,8 +8,8 @@ using UnityEngine.UI;
 public class BinaryOperationVisual : VisualNode {
 
 
-    public Text operand1;
-    public Text operand2;
+    public Text firstOperand;
+    public Text secondOperand;
     //Use operations dictionary keys to fill out options, do this at start, or since they're static just always have it, prob latter
     public Dropdown operators;
 

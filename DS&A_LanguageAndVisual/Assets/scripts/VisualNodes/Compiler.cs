@@ -8,7 +8,7 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
     public class Compiler {
 
 
-    VisualNode root;
+    BlockVisual root;
     DataStructureLanguage.Syntax.Util.SyntaxTree compiled;
 
     //This will be if for error checking or if just for running
@@ -20,10 +20,12 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
 
 
-    public Compiler(VisualNode root)
+    //Need to test this Compiler, but due to time constraints I'll test in one go.
+    //Syntax tree for sure works, visualNode structure works, the parsing phase is the one to test, but should also theoritaclly work.
+    public Compiler(BlockVisual root)
     {
         this.root = root;
-        compiled.add(root, null);
+        //Actually root is always set to means tart of program, they don't start that, it's just for me.
 
     }
 
@@ -31,13 +33,15 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
     public void scan()
     {
         VisualNode current = root;
+        //Purely to know when to stop.
         Stack<VisualNode> frames = new Stack<VisualNode>();
         //frames.Push(current);
 
         //I think the next stuff here is fine
         do 
         {
-            VisualNode next = current.next;
+            //Now regadless if BlockVisual or not will still work as expected
+            VisualNode next = current.Next;
 
             if (next is BlockVisual)
             {
@@ -56,15 +60,16 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
             SyntaxNode syntaxNode = constructSyntaxNode(current);
             if (syntaxNode != null)
             {
-                //Gotta keep track of head per body
 
-                if ()
+                BlockVisual block = getOwningBody(syntaxNode);
+
+                if (block.id == "else")
                 {
-                    compiled.add(current, current.lineNumbers, true);
+                    compiled.add(syntaxNode, current.lineNumbers, true);
                 }
                 else
-                    compiled.add(current, current.lineNumbers);
-
+                    compiled.add(syntaxNode, current.lineNumbers);
+                    
             }
         }
         while (frames.Count > 0);
@@ -83,18 +88,31 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
         SyntaxNode node = SyntaxNodeFactory.produce(e.ID);
 
-
-        //TODo: Do make an executing node, that just execute for assignments or just assignmentnode, with it's variants. Shouldn't be too hard just dictionary for assignment and structured same as binaryOperations/
-        //This will take priority, need to give them the exec method
         if (node is BlockNode)
         {
             if (node is IfNode)
             {
                 //It should still retain while if is while
-                IfNode conditionalStatement = (IfNode)node;
+                IfNode ifBlock = (IfNode)node;
+                BinaryOperationNode conditionalStatement = new BinaryOperationNode();
 
-                //Set it's attributes with fields
+                //Set it's attributes with fields in the operationVisual
+                BlockVisual block = (BlockVisual)e;
+                BinaryOperationVisual condition = (BinaryOperationVisual)block.Head;
+                
+                if (condition == null)
+                {
+                    //Throw an exception
+                }
+                //Move these three to a function, since duplicate code, but that's polish.
+                conditionalStatement.FirstOperand = condition.firstOperand.text;
+                conditionalStatement.SecondOperand = condition.secondOperand.text;
+                conditionalStatement.SetOperator(condition.operators.options[condition.operators.value].text);
+
+                ifBlock.SetCondition = conditionalStatement;
+
             }
+            //Do this later, get working for minimum stuff
             else if (node is ForLoopNode)
             {
                 ForLoopNode flNode = (ForLoopNode)node;
@@ -103,17 +121,40 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
             }
 
         }
+        else if (e is BinaryOperationVisual)
+        {
+            if (node is BinaryOperationNode)
+            {
+                convertBinaryOperation((BinaryOperationNode)node, (BinaryOperationVisual)e);
+            }
+        }
 
+        //It should hold all it's changes.
         return node;
 
     }
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+
+#region Utility Methods
+    private void convertBinaryOperation(BinaryOperationNode node, BinaryOperationVisual binaryOperationVisual)
+    {
+        node.FirstOperand = binaryOperationVisual.firstOperand.text;
+        node.SecondOperand = binaryOperationVisual.secondOperand.text;
+        node.SetOperator(binaryOperationVisual.operators.options[binaryOperationVisual.operators.value].text);
+    }
+
+    private BlockVisual getOwningBody(VisualNode visualNode)
+    {
+        //Trace back visual node to first BlockBody it sees, because that will be body it belongs to.
+        VisualNode current = visualNode.Prev;
+
+        while (!(current is BlockVisual))
+        {
+            current = current.Prev;
+        }
+
+        return (BlockVisual)current;
+    }
+
+#endregion
 }
