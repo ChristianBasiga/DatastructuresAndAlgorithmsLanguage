@@ -5,9 +5,13 @@ using UnityEngine.UI;
 
 public class BlockVisual : VisualNode {
 
-    //Head will always be BinaryOperationNode for condition or function sig.
+
+    //Not neccessarily...neccesarry because else has no condition but is technically a block visual
+    GameObject openingBlock;
+    GameObject closingBlock;
+    
     VisualNode head;
-    //Scratch head has to be self.
+
     
     //Basically forcing state on these, now when would I reset current? I guess leave that up to develeoper
     //but that's for sure a design flaw.
@@ -22,15 +26,45 @@ public class BlockVisual : VisualNode {
     // Use this for initialization
     void Start() {
 
-        //Basically every VisualNode will traceback until they find BlockNode, then that's their scope.
-        //Tbh it's only needed for Else, but I'll find other uses and it seems like would be useful for extending this later on
-        head = transform.GetChild(0).GetComponent<VisualNode>();
-        head.Prev = this;
+
+        //Head is always just this visualNode itself
+        head = this;
+
+
+        for (int i = 1; i < transform.childCount; ++i)
+        {
+            //not needed but just incase change heirarchy, it doesn't mess everything up.
+            if (transform.GetChild(i).gameObject.name == "start")
+            {
+                openingBlock = transform.GetChild(i).gameObject;
+            }
+            else if (transform.GetChild(i).gameObject.name == "end")
+            {
+                closingBlock = transform.GetChild(i).gameObject;
+
+            }
+        }
+        
 
         head = current;
         tail = null;
     }
 
+    public GameObject OpeningBlock
+    {
+        get
+        {
+            return openingBlock;
+        }
+    }
+
+    public GameObject ClosingBlock
+    {
+        get
+        {
+            return closingBlock;
+        }
+    }
    
     public override VisualNode Next{
 
@@ -40,18 +74,23 @@ public class BlockVisual : VisualNode {
             //But kinda seems fucked up, getting Next will not be same Next you are expecting
             //me overriding this makes it more streamlined, but at the cost of ambiguity, should I change it to next child instead?
             //Again this is semantics and causes only slight changes in code, but think latter is definitely better.
-            next = value;
+            VisualNode newNext = value;
+
+            if (this.next != null)
+            {
+                newNext.Next = next;
+                next = newNext;
+            }
         }
         get
         {
-            //Should Documentation just mention this?
+            //Should Documentation just mention this? Actually kinda does feel stupid but it's okay.
             if (current.Next == null)
             {
                 //Actully would I end up calling my own Next end up causing recursion, instead of calling base one, we'll see if this works
                 //this definietly something to test in isolation
                 return base.Next;
             }
-
             current = current.Next;
             return current;
         }
@@ -102,7 +141,6 @@ public class BlockVisual : VisualNode {
     {
         current = current.Next;
         return current;
-
     }
 
     public VisualNode prevChild()

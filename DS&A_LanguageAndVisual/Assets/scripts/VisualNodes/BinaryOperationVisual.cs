@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-
+//Might need to extend this for Logical, but it's just changing what's inside operators, so really just different instances
+//not different objects
 public class BinaryOperationVisual : VisualNode {
 
 

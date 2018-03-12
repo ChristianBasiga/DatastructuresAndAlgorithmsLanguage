@@ -18,27 +18,57 @@ namespace DataStructureLanguage.UserInterface
         public event VisualNodeInteraction placeNode;
 
         VisualNode currentlyClicked = null;
-
+        Vector3 lastTouched;
 
 
         // Use this for initialization
         void Start()
         {
-            //Should work theoritically, see nothing wrong with logic, though do need to change it so set through property instead so I can trigger events of placement, like spacing with 
-            //This here works for most part but gotta make sure to make it slightly different if block visual
+            
+            //Getting pretty big to be just lambda, but eh.
             placeNode += (VisualNode toPlaceWith) => {
 
                 //So if it's a block node I want to attach it to head of that node not append to head of root node.
-                if (toPlaceWith is BlockVisual && toPlaceWith.gameObject.name == "head")
+                if (toPlaceWith is BlockVisual)
                 {
-                    //Need way to determine if inside body of block visual or not, I need the tail gameObject, and then that needs to have reference to BlockVisual, and it should be the same instance
-                    //look into that but check will just be this.
-                    BlockVisual visual = (BlockVisual)toPlaceWith;
-                    visual.append(currentlyClicked);
+                    BlockVisual block = (BlockVisual)toPlaceWith;
+                    
+                    //If where touched is in opening block of block visual, then it's inside it's body
+                    if (block.OpeningBlock.GetComponent<Collider>().bounds.Contains(lastTouched))
+                    {
+                        Debug.Log("Will go inside block");
+                        block.append(currentlyClicked);
+                    }
+                    //Or if it's in closing block then appends to next of actual.
+                    else if (block.ClosingBlock.GetComponent<Collider>().bounds.Contains(lastTouched))
+                    {
+                        Debug.Log("Will go to next statement after this block");
+                        block.Next = currentlyClicked;
+                    }
+                    else if (block is ConditionalVisual)
+                    {
+                        //So the conditionalVisual always has a condition block with collider set up, but that block will also have a fiel
+                        ConditionalVisual cv = (ConditionalVisual)block;
+                        
+                        //If they touched it there, then set the currentClicked VisualNode to be the binary visual node placed inside this condition
+                        if (cv.ConditionBlock.GetComponent<Collider>().bounds.Contains(lastTouched))
+                        {
+                            //Because putting another block visual there wouldn't make any sense
+                            //I could enforce logical too with tags, or just let numbers happen too
+                            if (currentlyClicked is BinaryOperationVisual && currentlyClicked.gameObject.CompareTag("logical"))
+                            {
+                                Debug.Log("Will go inside condition of this block");
+                                cv.condition = (BinaryOperationVisual)currentlyClicked;
+                            }
+                            else
+                            {
+                                Debug.Log("Invalid block");
+                            }
+                        }
+                    }
                 }
                 else
                 {
-
                     toPlaceWith.Next = currentlyClicked;
                 }
 
@@ -48,28 +78,30 @@ namespace DataStructureLanguage.UserInterface
         // Update is called once per frame
         void Update()
         {
+            //There's some breach of responsibility, this has touch position
 
             for (int i = 0; i < Input.touchCount; ++i) {
 
                 Touch touch = Input.GetTouch(i);
+                //If done touching, then check if touched visual node
 
                 if (touch.phase == TouchPhase.Ended) {
 
                     Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                    lastTouched = touch.position;
                     RaycastHit hit;
 
                     if (Physics.Raycast(ray, out hit))
                     {
                         if (hit.collider != null)
-                        {
-                            //So if hit visual Node then trigger the event OnClick
+                        {                   
                             if (hit.collider.gameObject.GetComponent<VisualNode>())
                             {
+                                Debug.Log("I touched visual");
                                 OnClickedNode(hit.collider.gameObject);
                             }
                             else if (hit.collider.gameObject.name == "Compile")
                             {
-
                                 clickedCompile();
                             }
                         
@@ -80,7 +112,6 @@ namespace DataStructureLanguage.UserInterface
             }
         }
 
-        //Everytime press use raycast 
         public void OnClickedNode(GameObject clicked)
         {
             if (currentlyClicked == null)
@@ -93,7 +124,6 @@ namespace DataStructureLanguage.UserInterface
             }
             else
             {
-
                 //So if not placed then place node with respect to newly clicked node
                 if (placeNode != null)
                 {
