@@ -9,16 +9,13 @@ namespace DataStructureLanguage.UserInterface
     public class VisualNodeMenu : MonoBehaviour
     {
 
-        //Instances of all kinds of visual nodes with default values, this will just be loading in prefabs and setting them inactive to active
-        List<GameObject> previews;
-        //They'll share ta tag with actual non preview objects
-        //it should be just decorator pattern, preview extending from actual ones to add those buttons
-        //actually yeah, wtf yo.
+        List<VisualNodeOption> previews;
+    
         int previewIndex;
 
         void Start()
         { 
-            previews = new List<GameObject>();
+            previews = new List<VisualNodeOption>();
 
             //Adds the previews into array and sets up all of the onclick events for previewing and instnatiating visual nodes
             for (int i = 0; i < transform.childCount; ++i)
@@ -26,23 +23,12 @@ namespace DataStructureLanguage.UserInterface
                //Those prefabs honestly don't even need to have VisualNode / BlockVisual scripts just similiar prefabs
                //just means I won't instantiate the option, but a different prefab.
 
-                GameObject obj = transform.GetChild(i).gameObject;
+                
+                VisualNodeOption obj = transform.GetChild(i).gameObject.GetComponent<VisualNodeOption>();
                 previews.Add(obj);
+                obj.optionNumber = i;
 
-                Button[] buttons = previews[i].GetComponentsInChildren<Button>();
-
-                if (buttons[0].name == "Preview")
-                {
-                    //Oh fuck me, I remember this same problem in java script, it keeps state of what i was  so it's at end 3
-                    buttons[0].onClick.AddListener( () => { this.openPreview(previews.IndexOf(obj)); });
-                    buttons[1].onClick.AddListener( () => { this.instantiateVisualNode(previews.IndexOf(obj)); });
-                }
-                else
-                {
-                    buttons[0].onClick.AddListener( () => { this.instantiateVisualNode(previews.IndexOf(obj)); });
-                    buttons[1].onClick.AddListener( () => { this.openPreview(previews.IndexOf(obj)); });
-                }
-
+             
                 previews[i].transform.GetChild(0).gameObject.SetActive(false);
             }
 
@@ -56,14 +42,15 @@ namespace DataStructureLanguage.UserInterface
             };
 
         }
-
+        /*
         //I need to spend time to make this more visually appealing, functionality is all working
-        public void instantiateVisualNode(int optionIndex)
+        public void createVisualNode(int optionIndex)
         {
-            //Actually creating new insance of node, could just keep with preview values insead of making empty
-            GameObject node = Instantiate(previews[optionIndex], Vector3.zero, Quaternion.identity);
+            //Instantiating the referencing node instead, once I create pool for this, will be taking from pool instead
+            //but that's polish
+            GameObject node = Instantiate(previews[optionIndex].referencing, Vector3.zero, Quaternion.identity).gameObject;
 
-            //Not at same position but just randomly on the canvas.
+            //Not at same position but just at "origin" of canvas probably.
             node.transform.position = previews[optionIndex].transform.position;
             node.transform.GetChild(0).gameObject.SetActive(true);
             node.SetActive(true);
@@ -72,8 +59,11 @@ namespace DataStructureLanguage.UserInterface
 
         public void openPreview(int optionIndex)
         {
+            //This fine just need extra dereference to gameObject
             Debug.Log("Option index is " + optionIndex);
-            previews[optionIndex].transform.GetChild(0).gameObject.SetActive(true);
+            previews[optionIndex].gameObject.transform.GetChild(0).gameObject.SetActive(true);
         }
+
+    */
     }
 }

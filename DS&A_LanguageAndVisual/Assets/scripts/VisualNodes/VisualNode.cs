@@ -42,10 +42,5 @@ public abstract class VisualNode : MonoBehaviour {
         get { return id; }
     
     }
-
-
-   
-
-
 }
 
