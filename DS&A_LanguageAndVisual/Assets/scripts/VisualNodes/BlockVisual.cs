@@ -137,12 +137,9 @@ public class BlockVisual : VisualNode {
 
         //Updating the collider boxes.
 
-        //Moves the closing block down, this will be same logic for all  Visual Nodes to go down, move this to function
         RectTransform rt = closingBlock.GetComponent<RectTransform>();
 
-        rt.offsetMin = new Vector2(rt.offsetMin.x, rt.offsetMin.y - veritcalSpacing);
-        rt.offsetMax = new Vector2(rt.offsetMax.x, rt.offsetMax.y + veritcalSpacing);
-
+        this.moveDown(rt);
 
         //Increasing collider of this block visual, for newly added block
         BoxCollider boxCollider = GetComponent<BoxCollider>();

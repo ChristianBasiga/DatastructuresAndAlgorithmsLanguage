@@ -15,7 +15,40 @@ public abstract class VisualNode : MonoBehaviour {
     {
         set
         {
-            next = value;
+            //Theoritcally this should work.
+            if (next != null)
+            {
+                VisualNode newNext = value;
+                newNext.transform.position = next.transform.position;
+                //Then recur down, this process should be coroutine, maybe, nah it's okay if this thread get's held up, cause don't want new inputs
+                //while processing their last inputs.
+
+                //Temp will be previous
+                VisualNode temp = next;
+
+                //Sets the current next to new next attached to this code block
+                next = newNext;
+
+
+                //Actually just really need to move everything down, don't need to swap at all
+                while (temp != null)
+                {
+                    moveDown(temp.gameObject.GetComponent<RectTransform>());
+
+                    //So this is next of old next,
+                    temp = temp.Next;
+                }
+            }
+            else
+            {
+                next = value;
+                //Place in same position. (Assuming this works for RectTransform as seemed to before.
+                next.transform.position = transform.position;
+
+                //Then move down to be directly below it,
+                moveDown(next.GetComponent<RectTransform>());
+            }
+
         }
         get
         {
@@ -48,6 +81,8 @@ public abstract class VisualNode : MonoBehaviour {
 
     public void moveDown(RectTransform rectTransform)
     {
+        rectTransform.offsetMin = new Vector2(rt.offsetMin.x, rt.offsetMin.y - veritcalSpacing);
+        rectTransform.offsetMax = new Vector2(rt.offsetMax.x, rt.offsetMax.y + veritcalSpacing);
 
     }
 }
