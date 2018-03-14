@@ -8,6 +8,9 @@ public abstract class VisualNode : MonoBehaviour {
     //Maybe make property later, do thiss, I forgot why needed but is important
     protected VisualNode prev, next;
 
+    public static readonly float veritcalSpacing = 200.0f;
+
+
     public virtual VisualNode Next
     {
         set
@@ -41,6 +44,11 @@ public abstract class VisualNode : MonoBehaviour {
     {
         get { return id; }
     
+    }
+
+    public void moveDown(RectTransform rectTransform)
+    {
+
     }
 }
 

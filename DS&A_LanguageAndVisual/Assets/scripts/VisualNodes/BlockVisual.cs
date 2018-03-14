@@ -9,6 +9,8 @@ public class BlockVisual : VisualNode {
     //Not neccessarily...neccesarry because else has no condition but is technically a block visual
     GameObject openingBlock;
     GameObject closingBlock;
+
+    //This should just be there
     
     VisualNode head;
 
@@ -34,11 +36,11 @@ public class BlockVisual : VisualNode {
         for (int i = 1; i < transform.childCount; ++i)
         {
             //not needed but just incase change heirarchy, it doesn't mess everything up.
-            if (transform.GetChild(i).gameObject.name == "start")
+            if (transform.GetChild(i).gameObject.name == "Start")
             {
                 openingBlock = transform.GetChild(i).gameObject;
             }
-            else if (transform.GetChild(i).gameObject.name == "end")
+            else if (transform.GetChild(i).gameObject.name == "End")
             {
                 closingBlock = transform.GetChild(i).gameObject;
 
@@ -123,7 +125,7 @@ public class BlockVisual : VisualNode {
 	public void append(VisualNode node)
     {
         //Always start off at head's next
-        VisualNode curr = head.Next;
+        VisualNode curr = head;//.Next;
 
         while (curr.Next != null)
         {
@@ -132,6 +134,22 @@ public class BlockVisual : VisualNode {
 
         curr.Next = node;
         node.Next = null;
+
+        //Updating the collider boxes.
+
+        //Moves the closing block down, this will be same logic for all  Visual Nodes to go down, move this to function
+        RectTransform rt = closingBlock.GetComponent<RectTransform>();
+
+        rt.offsetMin = new Vector2(rt.offsetMin.x, rt.offsetMin.y - veritcalSpacing);
+        rt.offsetMax = new Vector2(rt.offsetMax.x, rt.offsetMax.y + veritcalSpacing);
+
+
+        //Increasing collider of this block visual, for newly added block
+        BoxCollider boxCollider = GetComponent<BoxCollider>();
+
+        boxCollider.size = new Vector3(boxCollider.size.x, boxCollider.size.y + veritcalSpacing, 0);
+        boxCollider.center = new Vector3(boxCollider.center.x, boxCollider.center.y - (veritcalSpacing / 2), 0);
+       
     }
 
     //This is why I need to make method for Next, so that I can override it, this is definitely high on TODO

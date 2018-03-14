@@ -33,6 +33,7 @@ namespace DataStructureLanguage.UserInterface
                 {
                     BlockVisual block = (BlockVisual)toPlaceWith;
                     
+
                     //If where touched is in opening block of block visual, then it's inside it's body
                     if (block.OpeningBlock.GetComponent<Collider>().bounds.Contains(lastTouched))
                     {
@@ -43,6 +44,8 @@ namespace DataStructureLanguage.UserInterface
                     else if (block.ClosingBlock.GetComponent<Collider>().bounds.Contains(lastTouched))
                     {
                         Debug.Log("Will go to next statement after this block");
+
+                        //Then the next property will handle placing the block directly below something
                         block.Next = currentlyClicked;
                     }
                     else if (block is ConditionalVisual)
