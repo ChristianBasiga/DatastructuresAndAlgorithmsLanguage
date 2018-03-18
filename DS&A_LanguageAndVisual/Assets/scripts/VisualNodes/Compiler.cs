@@ -68,11 +68,18 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
                 lineNumbers[lineDimension]++;
                 current = next;
             }
+           
             SyntaxNode syntaxNode = constructSyntaxNode(current);
             if (syntaxNode != null)
             {
+
+                //Subscribing event of highlighting the corresponding VisualNode when the that SyntaxNode is executed.
+                syntaxNode.onBeginExecuting += () => { current.highlight(); };
+                syntaxNode.onDoneExecuting += () => { current.unhighlight(); };
+
+
                 //What happens when you take breaks in between dev. I don't need to backtrace, the last added BlockVisual is the body of this current node.
-                //BlockVisual block = getOwningBody(syntaxNode);
+                 //BlockVisual block = getOwningBody(syntaxNode);
                 BlockVisual block = frames.Peek();
 
                 if (block.ID == "else")

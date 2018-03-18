@@ -24,5 +24,12 @@ namespace DataStructureLanguage.UserInterface
             uc.clickedStart += () => { compiler.execute(); };
 
         }
+
+
+        //This will traverse from root to all visual nodes and removes them all.
+        public void clear()
+        {
+
+        }
     }
 }

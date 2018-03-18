@@ -171,4 +171,25 @@ public class BlockVisual : VisualNode {
             return current;
         }
     }
+
+    public override void delete()
+    {
+        VisualNode current = head;
+        VisualNode prev = null;
+
+
+        //Deletes everything nested under it.
+        while (current != null)
+        {
+            //Okay this is where next is wanted to overriden, cause nested loops also recursively deleted.
+            prev = current;
+            current = current.Next;
+            Destroy(prev);
+            prev = null;
+        }
+
+        //To delete itself
+        base.delete();
+
+    }
 }

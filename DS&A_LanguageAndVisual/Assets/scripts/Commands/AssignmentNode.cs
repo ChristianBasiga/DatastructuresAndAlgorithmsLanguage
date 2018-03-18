@@ -5,19 +5,21 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
     public class AssignmentNode : BinaryOperationNode, IExecute
     {
-
-        //So it knows what variables structure to look through / insert into 
-
         public AssignmentNode()
         {
 
         }
 
-        //Streamlining execute was really nice, maybe how I did it in iOS was actually better. Well shit.
+
         public void execute(DataStructureLanguage.Syntax.Util.SyntaxTree programToLookIn)
         {
+            //Prob best as coroutine tbh
+            OnBeginExecuting();
+
             Variable one, two;
 
+
+            IsExecuting();
             //Here check if the strings are numeric, if they are then just number, otherwise check for variable name in dictionary.
             try
             {
@@ -43,6 +45,8 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
                 //Because one is referencing the variable already inside the dictionary.
                 one.Value = two.Value;
             }
+
+            OnDoneExecuting();
 
         }
 

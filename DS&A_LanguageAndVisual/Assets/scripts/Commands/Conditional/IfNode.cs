@@ -35,6 +35,11 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
         //Unless instead of attribute, I just pass in the SyntaxTree so it knows where to look, that way I could possible reuse nodes. That might be better
         public bool didPass(DataStructureLanguage.Syntax.Util.SyntaxTree syntaxTree)
         {
+
+            //These event starts only need to be here cause all share same didPass method
+            OnBeginExecuting();
+            IsExecuting();
+
             //These meant to be temporary variables just to hold either the number or variable stored in SyntaxTree, and this way I can just move logic to function to avoid
             //duplicate code
             Variable one, two;
@@ -49,6 +54,10 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
             {
                 throw e;
             }
+
+
+            OnDoneExecuting();
+
             //Does actual operation, returning the result. Todo: Do same in assignment node.
             return Operators.logicalOperations[condition.Operation](one, two);
         }

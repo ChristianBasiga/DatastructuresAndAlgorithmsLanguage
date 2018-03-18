@@ -34,6 +34,8 @@ namespace DataStructureLanguage.UserInterface
                     BlockVisual block = (BlockVisual)toPlaceWith;
                     
 
+                    //May have to change this logic, we'll see though.
+
                     //If where touched is in opening block of block visual, then it's inside it's body
                     if (block.OpeningBlock.GetComponent<Collider>().bounds.Contains(lastTouched))
                     {

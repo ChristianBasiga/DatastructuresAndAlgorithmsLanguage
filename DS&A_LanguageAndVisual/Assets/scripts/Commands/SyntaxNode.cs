@@ -12,10 +12,41 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
 
         //For loops when they hit leaf, then go back to scope and execute that, later on will also be used for functions and the like
         BlockNode scope;
-
-
         SyntaxNode left;
         SyntaxNode right;
+
+
+        //event handlers.
+        public delegate void ExecutionEvent();
+
+        public ExecutionEvent onBeginExecuting;
+        public ExecutionEvent isExecuting;
+        public ExecutionEvent onDoneExecuting;
+
+        //Why don't I see these?
+        protected void OnBeginExecuting()
+        {
+            if (onBeginExecuting != null)
+            {
+                onBeginExecuting();
+            }
+        }
+
+        protected void IsExecuting()
+        {
+            if (isExecuting != null)
+            {
+                isExecuting();
+            }
+        }
+
+        protected void OnDoneExecuting()
+        {
+            if (onDoneExecuting != null)
+            {
+                onDoneExecuting();
+            }
+        }
 
 
         public SyntaxNode()

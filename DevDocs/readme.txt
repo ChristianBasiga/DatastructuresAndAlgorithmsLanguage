@@ -1,0 +1,1 @@
+All of my updated dev docs have been on paper, will transpose to mark down files later on. But easier to think when it's on paper.

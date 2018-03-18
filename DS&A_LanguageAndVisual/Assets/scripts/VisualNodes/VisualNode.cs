@@ -7,8 +7,11 @@ public abstract class VisualNode : MonoBehaviour {
 
     //Maybe make property later, do thiss, I forgot why needed but is important
     protected VisualNode prev, next;
+    public GameObject activeBG;
 
-    public static readonly float veritcalSpacing = 200.0f;
+    //The equations thought up work, but need this value to auto scale, instead of magic numbers, so this is magic spacing want,
+    //but as increase size, should update this.
+    public static readonly float veritcalSpacing = 100.0f;
 
 
     public virtual VisualNode Next
@@ -70,20 +73,37 @@ public abstract class VisualNode : MonoBehaviour {
 
     //Representing kind of Visual Node
     string id;
-
-    //I suppose IfElse prefab will just be GameObject with two GameObjects parented under it, an If and an Else Visual Node. Think that makes
-    //most sense
+    
     public string ID
     {
         get { return id; }
     
     }
 
-    public void moveDown(RectTransform rectTransform)
+    public void moveDown(RectTransform rt)
     {
-        rectTransform.offsetMin = new Vector2(rt.offsetMin.x, rt.offsetMin.y - veritcalSpacing);
-        rectTransform.offsetMax = new Vector2(rt.offsetMax.x, rt.offsetMax.y + veritcalSpacing);
+        rt.offsetMin = new Vector2(rt.offsetMin.x, rt.offsetMin.y - veritcalSpacing);
+        rt.offsetMax = new Vector2(rt.offsetMax.x, rt.offsetMax.y + veritcalSpacing);
 
+    }
+
+    public void highlight()
+    {
+        activeBG.SetActive(true);
+    }
+
+    public void unhighlight()
+    {
+        activeBG.SetActive(false);
+    }
+
+    //Incase they change their mind and want to delete, then visual nodes get rid of them selves.
+    public virtual void delete()
+    {
+
+        //Maybe make pool later, but not sure how big to make them, and that's efficieny later, also would be better since
+        //recursiveley deleting all inner blocks of visual block will be costly.
+        Destroy(this);
     }
 }
 
