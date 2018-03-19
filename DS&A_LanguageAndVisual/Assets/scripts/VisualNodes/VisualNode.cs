@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //No instance of just visual node is possible, put in correct namespace later.
-public abstract class VisualNode : MonoBehaviour {
+//removed abstract for root
+public class VisualNode : MonoBehaviour {
 
     //Maybe make property later, do thiss, I forgot why needed but is important
     protected VisualNode prev, next;
     public GameObject activeBG;
 
     //The equations thought up work, but need this value to auto scale, instead of magic numbers, so this is magic spacing want,
-    //but as increase size, should update this.
+    //but as increase size, should update this, magic numbersss
     public static readonly float veritcalSpacing = 6;
-
+    //Just get rid of indenting, actual logic and connections are solid
+    public static readonly float horizontalSpacing = (veritcalSpacing * 2) - 1.3f;
 
     public virtual VisualNode Next
     {
@@ -151,6 +153,11 @@ public abstract class VisualNode : MonoBehaviour {
 
         toMove.transform.Translate(new Vector3(0, -veritcalSpacing, 0));
 
+    }
+
+    public void moveLeft(GameObject toMove)
+    {
+        toMove.transform.Translate(new Vector3(-horizontalSpacing, 0, 0));
     }
 
     public void highlight()

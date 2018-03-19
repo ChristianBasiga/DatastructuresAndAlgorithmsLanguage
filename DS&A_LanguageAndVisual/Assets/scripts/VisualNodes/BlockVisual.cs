@@ -62,9 +62,10 @@ public class BlockVisual : VisualNode {
             base.Next = value;
 
             //Everything I do is same as in base, except position is relative to closing block's position, not the node itself.
+            //I may also get rid of the indent here, but that may or may not happen.
             next.transform.position = closingBlock.transform.position;
             this.moveDown(next.gameObject);
-
+            this.moveLeft(next.gameObject);
 
         }
         get
@@ -89,7 +90,6 @@ public class BlockVisual : VisualNode {
         }
     }
 
-    //So need to detect if touching head of block visual when do this is key point, update that in the UserController
     public void setHead(VisualNode visualNode)
     {
         //Can't put something that's not a value inside here

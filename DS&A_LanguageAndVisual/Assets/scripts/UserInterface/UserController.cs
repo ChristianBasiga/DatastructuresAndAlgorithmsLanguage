@@ -62,11 +62,12 @@ namespace DataStructureLanguage.UserInterface
                         {
                             OnClickedNode(hit.collider.gameObject);
                         }
+                        /*
                         else if (hit.collider.gameObject.name == "Compile")
                         {
                             clickedCompile();
                         }
-
+                        */
                     }
 
                 }

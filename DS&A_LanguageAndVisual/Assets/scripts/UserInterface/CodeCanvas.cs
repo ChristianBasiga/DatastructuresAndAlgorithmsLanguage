@@ -17,14 +17,27 @@ namespace DataStructureLanguage.UserInterface
         {
             compiler = new Compiler(root.GetComponent<BlockVisual>());
             root = transform.GetChild(0).gameObject;
-            UserController uc = GameObject.Find("UserController").GetComponent<UserController>();
+
+            /*UserController uc = GameObject.Find("UserController").GetComponent<UserController>();
 
             //Might turn compiler back into monobehaviour so can use coroutines for both scanning and executing, but we'll see
             uc.clickedCompile += () => { compiler.scan(); };
             uc.clickedStart += () => { compiler.execute(); };
-
+            */
         }
 
+        //Could either have it here with buttons mapped to these via inspector or check with the raycast touch stuff and execute as neccessarry
+        //which adds more dynamicness so can add visuals or whatever as compiling, but could also just show it here.
+        //Will leave like this for now.
+        public void compile()
+        {
+            compiler.scan();
+        }
+
+        public void run()
+        {
+            compiler.execute();
+        }
 
         //This will traverse from root to all visual nodes and removes them all.
         public void clear()
