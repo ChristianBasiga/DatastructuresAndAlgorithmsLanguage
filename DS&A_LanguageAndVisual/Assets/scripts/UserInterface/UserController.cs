@@ -76,7 +76,9 @@ namespace DataStructureLanguage.UserInterface
                 {
                     toPlaceWith.Next = currentlyClicked;
                 }
-
+               ;
+                currentlyClicked = null;
+                toPlaceWith = null;
             };
         }
 
@@ -85,10 +87,41 @@ namespace DataStructureLanguage.UserInterface
         {
             //There's some breach of responsibility, this has touch position
 
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                lastTouched = Input.mousePosition;
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.collider != null)
+                    {
+
+                        if (hit.collider.gameObject.GetComponent<VisualNode>())
+                        {
+                            OnClickedNode(hit.collider.gameObject);
+                        }
+                        else if (hit.collider.gameObject.name == "Compile")
+                        {
+                            clickedCompile();
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    currentlyClicked = null;
+
+                }
+            }
+          
             for (int i = 0; i < Input.touchCount; ++i) {
 
                 Touch touch = Input.GetTouch(i);
                 //If done touching, then check if touched visual node
+
+             
 
                 if (touch.phase == TouchPhase.Ended) {
 
@@ -137,6 +170,7 @@ namespace DataStructureLanguage.UserInterface
                     if (newlyClicked != currentlyClicked)
                     {
                         placeNode(newlyClicked);
+
                     }
                 }
 

@@ -9,20 +9,21 @@ using UnityEngine.UI;
 public class BinaryOperationVisual : VisualNode {
 
 
-    public Text firstOperand;
-    public Text secondOperand;
+    public InputField firstOperand;
+    public InputField secondOperand;
     //Use operations dictionary keys to fill out options, do this at start, or since they're static just always have it, prob latter
     public Dropdown operators;
 
     // Use this for initialization
 	void Start () {
 
-        operators = transform.GetChild(0).GetComponent<Dropdown>();
-        firstOperand = transform.GetChild(1).GetComponent<InputField>().textComponent;
-        secondOperand = transform.GetChild(2).GetComponent<InputField>().textComponent;
+        /*  operators = transform.GetChild(2).GetComponent<Dropdown>();
+          firstOperand = transform.GetChild(3).GetComponent<InputField>().textComponent;
+          secondOperand = transform.GetChild(4).GetComponent<InputField>().textComponent;
+          */
 
-
-        operators.options.Clear();
+        operators.options = new List<Dropdown.OptionData>();
+        
 
         foreach (string operation in Operators.arithmeticOperations.Keys)
         {

@@ -11,46 +11,110 @@ public abstract class VisualNode : MonoBehaviour {
 
     //The equations thought up work, but need this value to auto scale, instead of magic numbers, so this is magic spacing want,
     //but as increase size, should update this.
-    public static readonly float veritcalSpacing = 100.0f;
+    public static readonly float veritcalSpacing = 6;
 
 
     public virtual VisualNode Next
     {
         set
         {
-            //Theoritcally this should work.
-            if (next != null)
+            if (value == this ) return;
+
+            if (value == null)
             {
+                next = null;
+                return;
+            }
+            //if already has a next then replace that next and set old next to this new next
+             if (next != null)
+            {
+                if (next == value) return;
+
                 VisualNode newNext = value;
-                newNext.transform.position = next.transform.position;
-                //Then recur down, this process should be coroutine, maybe, nah it's okay if this thread get's held up, cause don't want new inputs
-                //while processing their last inputs.
 
-                //Temp will be previous
-                VisualNode temp = next;
+                newNext.gameObject.transform.position = transform.position;
+                moveDown(newNext.gameObject);
 
-                //Sets the current next to new next attached to this code block
+                if (newNext.prev != null)
+                {
+                    newNext.prev.next = null;
+                }
+
+                //For swapping node places, if just two of them ie: 1->2 2->1 it will be infinite loop when enters the while loop
+                if (newNext.Next == this)
+                {
+                    newNext.prev = this;
+                    newNext.Next = null;
+                    next = newNext;
+                    return;
+                }               
+
+                //Then need to move all of the next of this new next as well this this itself.
+
+                VisualNode current = newNext;
+                VisualNode previousNode = current;
+
+                //Okay this works for getting rest of nexts
+                while (current.Next != null)
+                {
+                    
+                   current = current.Next;
+                   current.gameObject.transform.position = previousNode.gameObject.transform.position;
+                   previousNode = current;
+                   moveDown(current.gameObject);
+                }
+
+                if (current.Next == this)
+                {
+                    current.Next = null;
+                }
+
+                //If had no next then my prev is next to new next, if did then it's next to the last node attached to new next.
+                current.Next = next;
                 next = newNext;
 
 
-                //Actually just really need to move everything down, don't need to swap at all
-                while (temp != null)
-                {
-                    moveDown(temp.gameObject.GetComponent<RectTransform>());
-
-                    //So this is next of old next,
-                    temp = temp.Next;
-                }
             }
             else
             {
-                next = value;
-                //Place in same position. (Assuming this works for RectTransform as seemed to before.
-                next.transform.position = transform.position;
+                VisualNode newNext = value;
 
-                //Then move down to be directly below it,
-                moveDown(next.GetComponent<RectTransform>());
+                if (newNext.prev != null)
+                {
+                    newNext.prev.next = null;
+                }
+                if (newNext.Next == this)
+                {
+                    newNext.prev = this;
+                    newNext.Next = null;
+                    next = newNext;
+                }
+                next = newNext;
+
+
+
+                next.gameObject.transform.position = transform.position;
+                moveDown(next.gameObject);
+
+                VisualNode current = newNext;
+                VisualNode previousNode = current;
+
+                //This is to make sure gets all the next of new next.
+                while (current.Next != null)
+                {
+
+                    current = current.Next;
+                    current.gameObject.transform.position = previousNode.gameObject.transform.position;
+                    previousNode = current;
+                    moveDown(current.gameObject);
+                }
+
+              
+               
             }
+
+            Debug.Log("next of " + gameObject.name + "is " + next.gameObject.name);
+            next.prev = this;
 
         }
         get
@@ -80,10 +144,13 @@ public abstract class VisualNode : MonoBehaviour {
     
     }
 
-    public void moveDown(RectTransform rt)
+    public void moveDown(GameObject toMove)
     {
-        rt.offsetMin = new Vector2(rt.offsetMin.x, rt.offsetMin.y - veritcalSpacing);
-        rt.offsetMax = new Vector2(rt.offsetMax.x, rt.offsetMax.y + veritcalSpacing);
+        // rt.offsetMin = new Vector2(rt.offsetMin.x, rt.offsetMin.y - veritcalSpacing);
+        // rt.offsetMax = new Vector2(rt.offsetMax.x, rt.offsetMax.y + veritcalSpacing);
+
+        toMove.transform.Translate(new Vector3(0, -veritcalSpacing, 0));
+        Debug.Log("moving down");
 
     }
 

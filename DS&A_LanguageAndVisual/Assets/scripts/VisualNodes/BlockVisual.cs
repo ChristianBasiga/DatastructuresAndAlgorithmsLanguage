@@ -137,9 +137,9 @@ public class BlockVisual : VisualNode {
 
         //Updating the collider boxes.
 
-        RectTransform rt = closingBlock.GetComponent<RectTransform>();
+      
 
-        this.moveDown(rt);
+        this.moveDown(closingBlock);
 
         //Increasing collider of this block visual, for newly added block
         BoxCollider boxCollider = GetComponent<BoxCollider>();

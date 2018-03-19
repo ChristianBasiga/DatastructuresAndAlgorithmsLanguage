@@ -21,15 +21,17 @@ public class VisualNodeOption : MonoBehaviour {
     {
 
         //Setting up the buttons.
-        Button previewButton = actionPanel.transform.GetChild(0).GetComponent<Button>();
-        Button createButton = actionPanel.transform.GetChild(1).GetComponent<Button>();
+        Button previewButton = actionPanel.transform.GetChild(1).GetComponent<Button>();
+        Button createButton = actionPanel.transform.GetChild(0).GetComponent<Button>();
         Button closeButton = actionPanel.transform.GetChild(2).GetComponent<Button>();
 
         previewButton.onClick.AddListener(openPreview);
 
         createButton.onClick.AddListener(createVisualNode);
 
-        closeButton.onClick.AddListener(() => { actionPanel.SetActive(false); });
+        closeButton.onClick.AddListener(() => { actionPanel.SetActive(false);
+            closePreview();
+        });
 
 
         actionPanel.SetActive(false);
@@ -56,6 +58,12 @@ public class VisualNodeOption : MonoBehaviour {
     void openPreview()
     {
         referencing.gameObject.SetActive(true);
+    }
+
+    void closePreview()
+    {
+        referencing.gameObject.SetActive(false);
+
     }
 
 }
