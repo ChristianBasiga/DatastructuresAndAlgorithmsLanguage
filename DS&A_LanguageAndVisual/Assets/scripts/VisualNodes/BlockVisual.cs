@@ -58,17 +58,24 @@ public class BlockVisual : VisualNode {
 
         set
         {
+
             base.Next = value;
+
+            //Everything I do is same as in base, except position is relative to closing block's position, not the node itself.
+            next.transform.position = closingBlock.transform.position;
+            this.moveDown(next.gameObject);
+
+
         }
         get
         {
-            //Should Documentation just mention this? Actually kinda does feel stupid but it's okay.
             if (current == null)
             {
                 //Actully would I end up calling my own Next end up causing recursion, instead of calling base one, we'll see if this works
                 //this definietly something to test in isolation
                 return base.Next;
             }
+
             current = current.Next;
             return current;
         }
@@ -107,8 +114,6 @@ public class BlockVisual : VisualNode {
             head = node;
             head.transform.position = openingBlock.transform.position;
             //Theoritcally should be working, need to make sure.
-
-        //    Debug.Log("Attaching to " + this.gameObject.name + "'s body is the node" + node.gameObject.name);
             this.moveDown(head.gameObject);
 
             return;
