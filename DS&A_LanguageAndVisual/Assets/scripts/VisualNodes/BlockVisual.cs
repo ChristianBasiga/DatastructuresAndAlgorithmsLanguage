@@ -7,8 +7,8 @@ public class BlockVisual : VisualNode {
 
 
     //Not neccessarily...neccesarry because else has no condition but is technically a block visual
-    GameObject openingBlock;
-    GameObject closingBlock;
+    public GameObject openingBlock;
+    public GameObject closingBlock;
 
     //This should just be there
     
@@ -29,26 +29,12 @@ public class BlockVisual : VisualNode {
     void Start() {
 
 
-        //Head is always just this visualNode itself
-        head = this;
 
 
-        for (int i = 1; i < transform.childCount; ++i)
-        {
-            //not needed but just incase change heirarchy, it doesn't mess everything up.
-            if (transform.GetChild(i).gameObject.name == "Start")
-            {
-                openingBlock = transform.GetChild(i).gameObject;
-            }
-            else if (transform.GetChild(i).gameObject.name == "End")
-            {
-                closingBlock = transform.GetChild(i).gameObject;
+        //Set the call backs
 
-            }
-        }
-        
 
-        head = current;
+        head = current = null;
         tail = null;
     }
 
@@ -72,22 +58,12 @@ public class BlockVisual : VisualNode {
 
         set
         {
-            //Have append method for adding onto inner list, then this would be actual next
-            //But kinda seems fucked up, getting Next will not be same Next you are expecting
-            //me overriding this makes it more streamlined, but at the cost of ambiguity, should I change it to next child instead?
-            //Again this is semantics and causes only slight changes in code, but think latter is definitely better.
-            VisualNode newNext = value;
-
-            if (this.next != null)
-            {
-                newNext.Next = next;
-                next = newNext;
-            }
+            base.Next = value;
         }
         get
         {
             //Should Documentation just mention this? Actually kinda does feel stupid but it's okay.
-            if (current.Next == null)
+            if (current == null)
             {
                 //Actully would I end up calling my own Next end up causing recursion, instead of calling base one, we'll see if this works
                 //this definietly something to test in isolation
@@ -125,31 +101,40 @@ public class BlockVisual : VisualNode {
 	public void append(VisualNode node)
     {
         //Always start off at head's next
+
+        if (head == null)
+        {
+            head = node;
+            head.transform.position = openingBlock.transform.position;
+            //Theoritcally should be working, need to make sure.
+
+        //    Debug.Log("Attaching to " + this.gameObject.name + "'s body is the node" + node.gameObject.name);
+            this.moveDown(head.gameObject);
+
+            return;
+        }
+
         VisualNode curr = head;//.Next;
+
+        Debug.Log("Attached to " + this.gameObject.name + "'s body is the node" + node.gameObject.name);
 
         while (curr.Next != null)
         {
+           // Debug.Log("then the node" + node.gameObject.name); Yup works
+
             curr = curr.Next;
         }
 
         curr.Next = node;
         node.Next = null;
 
-        //Updating the collider boxes.
 
       
 
         this.moveDown(closingBlock);
-
-        //Increasing collider of this block visual, for newly added block
-        BoxCollider boxCollider = GetComponent<BoxCollider>();
-
-        boxCollider.size = new Vector3(boxCollider.size.x, boxCollider.size.y + veritcalSpacing, 0);
-        boxCollider.center = new Vector3(boxCollider.center.x, boxCollider.center.y - (veritcalSpacing / 2), 0);
        
     }
 
-    //This is why I need to make method for Next, so that I can override it, this is definitely high on TODO
 
     //Have these already set, just change to nextChild to make explicit
     public VisualNode nextChild()
@@ -172,6 +157,7 @@ public class BlockVisual : VisualNode {
         }
     }
 
+  
     public override void delete()
     {
         VisualNode current = head;

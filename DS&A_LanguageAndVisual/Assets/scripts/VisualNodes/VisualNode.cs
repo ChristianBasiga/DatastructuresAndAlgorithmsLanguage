@@ -150,7 +150,6 @@ public abstract class VisualNode : MonoBehaviour {
         // rt.offsetMax = new Vector2(rt.offsetMax.x, rt.offsetMax.y + veritcalSpacing);
 
         toMove.transform.Translate(new Vector3(0, -veritcalSpacing, 0));
-        Debug.Log("moving down");
 
     }
 
