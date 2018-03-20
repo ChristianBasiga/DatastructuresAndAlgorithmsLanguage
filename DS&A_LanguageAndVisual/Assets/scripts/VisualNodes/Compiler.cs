@@ -8,7 +8,7 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
     public class Compiler {
 
 
-    BlockVisual root;
+    VisualNode root;
     DataStructureLanguage.Syntax.Util.SyntaxTree compiled;
 
     //This will be if for error checking or if just for running
@@ -22,7 +22,7 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
     //Need to test this Compiler, but due to time constraints I'll test in one go.
     //Syntax tree for sure works, visualNode structure works, the parsing phase is the one to test, but should also theoritaclly work.
-    public Compiler(BlockVisual root)
+    public Compiler(VisualNode root)
     {
         this.root = root;
         //Actually root is always set to means tart of program, they don't start that, it's just for me.
@@ -32,17 +32,20 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
     //Scans the code base
     public void scan()
     {
-        VisualNode current = root;
+        //Always skip the root cause just placeholder for me.
 
+        VisualNode current = root;
         //To keep track of bodies.
         Stack<BlockVisual> frames = new Stack<BlockVisual>();
         List<int> lineNumbers = new List<int>();
         lineNumbers.Add(0);
+        compiled = new DataStructureLanguage.Syntax.Util.SyntaxTree();
         //Representing how many levels deep lineNumber is in, basically the index.
         int lineDimension = 0;
 
         while (lineDimension > -1) 
         {
+
             //Now regadless if BlockVisual or not will still work as expected
             VisualNode next = current.Next;
 
@@ -55,6 +58,8 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
             //next in outer body.
             else if (next == null)
             {
+                if (frames.Count == 0) break;
+
                 current = frames.Peek();
 
                 //Reset that spot for the next time enter new body.
@@ -79,31 +84,44 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
 
                 //What happens when you take breaks in between dev. I don't need to backtrace, the last added BlockVisual is the body of this current node.
-                 //BlockVisual block = getOwningBody(syntaxNode);
-                BlockVisual block = frames.Peek();
+                //BlockVisual block = getOwningBody(syntaxNode);
 
-                if (block.ID == "else")
+                if (current is BlockVisual)
                 {
-                    compiled.add(syntaxNode, lineNumbers, true);
+                    BlockVisual block = frames.Peek();
+
+                    if (block.ID == "else")
+                    {
+                        compiled.add(syntaxNode, lineNumbers, true);
+                    }
+                    else
+                        compiled.add(syntaxNode, lineNumbers);
                 }
                 else
+                {
+                    Debug.Log("Successfuly made Syntax Node");
                     compiled.add(syntaxNode, lineNumbers);
-                    
+                }
             }
         }
 
+        Debug.Log("Done executing");
     }
 
     public void execute()
     {
         //Just test this out first, if runs without errors then work on syncing
-        compiled.start();
+       if (compiled.Compiled)
+        {
+            Debug.Log("saved state of tree");
+            compiled.start();
+
+        }
     }
 
     
     public SyntaxNode constructSyntaxNode(VisualNode e)
     {
-
         SyntaxNode node = SyntaxNodeFactory.produce(e.ID);
 
         if (node is BlockNode)
@@ -128,13 +146,12 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
             }
 
         }
-        else if (e is BinaryOperationVisual)
+        
+        else if (node is BinaryOperationNode)
         {
-            if (node is BinaryOperationNode)
-            {
                 convertBinaryOperation((BinaryOperationNode)node, (BinaryOperationVisual)e);
-            }
         }
+        
 
         //It should hold all it's changes.
         return node;

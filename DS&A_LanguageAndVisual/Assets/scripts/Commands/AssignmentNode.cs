@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DataStructureLanguage.Syntax.Util;
 namespace DataStructureLanguage.Syntax.SyntaxNodes
 {
-    public class AssignmentNode : BinaryOperationNode, IExecute
+    public class AssignmentNode : BinaryOperationNode
     {
         public AssignmentNode()
         {
@@ -11,7 +11,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
         }
 
 
-        public void execute(DataStructureLanguage.Syntax.Util.SyntaxTree programToLookIn)
+        public new void execute(DataStructureLanguage.Syntax.Util.SyntaxTree programToLookIn)
         {
             //Prob best as coroutine tbh
             OnBeginExecuting();

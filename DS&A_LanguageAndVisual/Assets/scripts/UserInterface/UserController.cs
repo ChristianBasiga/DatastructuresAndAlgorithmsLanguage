@@ -123,6 +123,8 @@ namespace DataStructureLanguage.UserInterface
             //I Suppose I could check it here.
             if (clicked.GetComponent<VisualNode>() && currentlyClicked == null)
             {
+                //Root should not be added to anything as next
+                if (clicked.name == "root") return;
                 currentlyClicked = clicked.GetComponent<VisualNode>();
                 //Triggers all the subscribe events
                 if (holdNode != null)

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using DataStructureLanguage.Syntax.SyntaxNodes;
 
@@ -9,7 +10,8 @@ namespace DataStructureLanguage.Syntax.Util
     {
         SyntaxNode root;
         SyntaxNode current;
-
+        bool constructed = false;
+       
         //To go back to from current body, basically a stackframe, everytime enters new block we push that new blck into this body and top of it is block we are currently in
         Stack<SyntaxNode> bodies;
 
@@ -18,7 +20,13 @@ namespace DataStructureLanguage.Syntax.Util
 
 
 
-
+        public bool Compiled
+        {
+            get
+            {
+                return constructed;
+            }
+        }
         public SyntaxTree(SyntaxNode root)
         {
             this.root = root;
@@ -33,13 +41,27 @@ namespace DataStructureLanguage.Syntax.Util
         public void start()
         {
             current = root;
+
+            if (current.leftChild() == null)
+            {
+                UnityEngine.Debug.Log("what happened");
+                return;
+            }
             //Cause new program is starting to allocate memory for this program to run.
             variables = new Dictionary<string, Variable>();
+            bodies = new Stack<SyntaxNode>();
             bodies.Push(current);
+
+
+            while (bodies.Count > 0)
+            {
+                traverseRight();
+            }
         }
 
         public void add(SyntaxNode node, List<int> bodies, bool forElse = false)
         {
+            constructed = true;
             if (root == null)
             {
                 node = root;
@@ -51,18 +73,25 @@ namespace DataStructureLanguage.Syntax.Util
             foreach (int bodyLine in bodies)
             {
                 //Then traverse left to that body line, then traverse right, to enter that body, then repeat process to get to correct node.
-                for (int i = 0; i < bodyLine; ++i)
+                for (int i = 1; i < bodyLine; ++i)
                 {
-                    current = current.leftChild();
-                }
 
-                current = current.rightChild();
+                    UnityEngine.Debug.Log("Body line is " + bodyLine);
+                    if (current.leftChild() == null)
+                    {
+                        UnityEngine.Debug.Log("no left child");
+                    }
+                    current = current.leftChild();
+                    UnityEngine.Debug.Log("state of tree is " + current);
+                }
+                if (current.rightChild() != null)
+                    current = current.rightChild();
             }
 
 
             //Below is just deciding if should go to left or right child, and checking if has an else
             bool toRight = node is BlockNode;
-
+            UnityEngine.Debug.Log(current == null);
             SyntaxNode toAttach = current;
             //I gotta rethink way I'm doing this part to make else works cause I hate it though it works
             if (current is IfElseNode && forElse)
@@ -79,12 +108,16 @@ namespace DataStructureLanguage.Syntax.Util
             }
             else
             {
+                UnityEngine.Debug.Log("hello");
+
                 if (toRight)
                 {
                     toAttach.setRightChild((BlockNode)node);
                 }
                 else
                 {
+                    UnityEngine.Debug.Log("adding to left child of root");
+                    UnityEngine.Debug.Log(toAttach == root);
                     toAttach.setLeftChild(node);
                 }
             }
@@ -92,13 +125,15 @@ namespace DataStructureLanguage.Syntax.Util
         }
 
         //This is all body transferring
-        public void traverseRight()
+        private void traverseRight()
         {
+
             if (current.rightChild() == null)
             {
                 traverseLeft();
                 return;
             }
+
 
             BlockNode newBlock = current.rightChild();
             
@@ -136,12 +171,16 @@ namespace DataStructureLanguage.Syntax.Util
         }
 
         //This is for executing other statements
-        public void traverseLeft()
+        private void traverseLeft()
         {
+            UnityEngine.Debug.Log("traversing left");
+            UnityEngine.Debug.Log(current.leftChild() == null);
             current = current.leftChild();
 
             if (current == null)
             {
+                UnityEngine.Debug.Log("left was null");
+
                 SyntaxNode prev = bodies.Peek();
                 if (prev == null)
                 {
@@ -161,13 +200,17 @@ namespace DataStructureLanguage.Syntax.Util
                 //If it's not a loop then just goes to left node of parent
                 else
                 {
-                    current = prev.getParent().leftChild();
+                    if (prev != root)
+                    {
+                        current = prev.getParent().leftChild();
+                    }
                 }
 
                 bodies.Pop();
             }
             else if (current is IExecute)
             {
+                UnityEngine.Debug.Log("hello");
                 IExecute executable = (IExecute)current;
                 executable.execute(this);
 

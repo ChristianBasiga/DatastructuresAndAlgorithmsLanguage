@@ -22,8 +22,8 @@ public class BinaryOperationVisual : VisualNode {
           secondOperand = transform.GetChild(4).GetComponent<InputField>().textComponent;
           */
 
-        operators.options = new List<Dropdown.OptionData>();
-        
+     //   operators.options = new List<Dropdown.OptionData>();
+        /*
 
         foreach (string operation in Operators.arithmeticOperations.Keys)
         {
@@ -37,6 +37,7 @@ public class BinaryOperationVisual : VisualNode {
             Dropdown.OptionData data = new Dropdown.OptionData(operation);
             operators.options.Add(data);
         }
+        */
     }
 
     // Update is called once per frame

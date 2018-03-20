@@ -23,7 +23,7 @@ public class SyntaxNodeFactory
             return new IfElseNode();
         }
 
-        return new IfElseNode();
+        return new BinaryOperationNode();
     }
 
 }
