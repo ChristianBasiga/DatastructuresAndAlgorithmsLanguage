@@ -5,6 +5,8 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
 
     //Compiler for the visual nodes
+    //This does compile them into syntax nodes but also executes so may rename this.
+
     public class Compiler {
 
 
@@ -154,13 +156,19 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
         {
             compiled.start();
             runningCode = true;
-            while (compiled.nextLine()) {
+            while (compiled.nextLine() && runningCode) {
                 yield return new WaitForSeconds(1.0f);
 
             }
             //Now here, instead of run, it will call nextline.
             runningCode = false;
         }
+    }
+
+    public void stopExecution()
+    {
+        runningCode = false;
+        compiled.stop();
     }
 
     

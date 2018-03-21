@@ -39,9 +39,19 @@ namespace DataStructureLanguage.Syntax.Util
             root.id = "root";
         }
 
+        public void stop()
+        {
+            if (current != null)
+            {
+                current.doneExecuting();
+
+            }
+        }
         //Start is now set up
         public void start()
         {
+
+            stop();
             current = root;
 
             
