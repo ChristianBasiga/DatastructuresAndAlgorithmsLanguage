@@ -12,9 +12,14 @@ public class VisualNode : MonoBehaviour {
 
     //The equations thought up work, but need this value to auto scale, instead of magic numbers, so this is magic spacing want,
     //but as increase size, should update this, magic numbersss
-    public static readonly float veritcalSpacing = 6;
+    public static readonly float veritcalSpacing = 45;
     //Just get rid of indenting, actual logic and connections are solid
     public static readonly float horizontalSpacing = (veritcalSpacing * 2) - 1.3f;
+
+    private void Start()
+    {
+        
+    }
 
     public virtual VisualNode Next
     {
@@ -39,7 +44,7 @@ public class VisualNode : MonoBehaviour {
 
                 if (newNext.prev != null)
                 {
-                    newNext.prev.next = null;
+                    newNext.prev.Next = null;
                 }
 
                 //For swapping node places, if just two of them ie: 1->2 2->1 it will be infinite loop when enters the while loop
@@ -138,7 +143,7 @@ public class VisualNode : MonoBehaviour {
     }
 
     //Representing kind of Visual Node
-    string id;
+    protected string id;
     
     public string ID
     {

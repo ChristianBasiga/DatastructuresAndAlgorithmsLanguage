@@ -20,7 +20,7 @@ namespace DataStructureLanguage.Syntax.Util
 
                     if (!syntaxTree.variables.ContainsKey(operand))
                     {
-                        throw new System.Exception(string.Format("The variable %s does not exist", operand));
+                        throw new System.Exception(string.Format("The variable {0} does not exist", operand));
                     }
                     else
                     {

@@ -37,7 +37,8 @@ namespace DataStructureLanguage.UserInterface
 
         public void run()
         {
-            compiler.execute();
+            if (!compiler.RunningCode)
+                StartCoroutine(compiler.execute());
         }
 
         //This will traverse from root to all visual nodes and removes them all.

@@ -9,6 +9,8 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
 
     VisualNode root;
+    bool runningCode = false;
+
     DataStructureLanguage.Syntax.Util.SyntaxTree compiled;
 
     //This will be if for error checking or if just for running
@@ -19,6 +21,13 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
     }
 
 
+    public bool RunningCode
+    {
+        get
+        {
+            return runningCode;
+        }
+    }
 
     //Need to test this Compiler, but due to time constraints I'll test in one go.
     //Syntax tree for sure works, visualNode structure works, the parsing phase is the one to test, but should also theoritaclly work.
@@ -45,28 +54,49 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
         while (lineDimension > -1) 
         {
+            VisualNode next;
 
-            //Now regadless if BlockVisual or not will still work as expected
-            VisualNode next = current.Next;
+            if (current is BlockVisual && current != root)
+            {
+                next = ((BlockVisual)current).nextNode();
+                //If next node of block is null, then go to next body
+                if (next == null)
+                {
+                    next = current.Next;
+                }
+            }
+            else {
+                next = current.Next;
+            }
 
             if (next is BlockVisual)
             {
                 frames.Push((BlockVisual)next);
+
+                lineDimension += 1;
+
+                if (lineDimension >= lineNumbers.Count)
+                    lineNumbers.Add(0);
+
                 current = next;
             }
-            //Because with how set up next in BlockVisual, when I set it to current it's current's next is now going to be null, then it'll go to actual
-            //next in outer body.
             else if (next == null)
             {
-                if (frames.Count == 0) break;
-
-                current = frames.Peek();
+                if (frames.Count > 0)
+                {
+                    current = frames.Peek();
+                    frames.Pop();
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
 
                 //Reset that spot for the next time enter new body.
                 lineNumbers[lineDimension] = 0;
 
                 lineDimension--;
-                frames.Pop();
             }
             else
             {
@@ -79,28 +109,35 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
             {
 
                 //Subscribing event of highlighting the corresponding VisualNode when the that SyntaxNode is executed.
-                syntaxNode.onBeginExecuting += () => { current.highlight(); };
-                syntaxNode.onDoneExecuting += () => { current.unhighlight(); };
+                //So both got highlight event, No i got it... It's a thread issue
+                syntaxNode.onBeginExecuting += current.highlight;
+                syntaxNode.onDoneExecuting += current.unhighlight;
 
 
                 //What happens when you take breaks in between dev. I don't need to backtrace, the last added BlockVisual is the body of this current node.
                 //BlockVisual block = getOwningBody(syntaxNode);
 
+                syntaxNode.id = current.gameObject.name;
+
                 if (current is BlockVisual)
                 {
-                    BlockVisual block = frames.Peek();
 
-                    if (block.ID == "else")
+
+                    BlockVisual block = (frames.Count > 0) ? frames.Peek() : null;
+
+                    if (block == null || block.ID == "else")
                     {
-                        compiled.add(syntaxNode, lineNumbers, true);
+                        compiled.add(syntaxNode, lineNumbers, lineDimension, true);
                     }
                     else
-                        compiled.add(syntaxNode, lineNumbers);
+                        compiled.add(syntaxNode, lineNumbers, lineDimension);
                 }
                 else
                 {
-                    Debug.Log("Successfuly made Syntax Node");
-                    compiled.add(syntaxNode, lineNumbers);
+
+                    Debug.Log("Successfuly made Syntax Node for " + current.gameObject.name);
+                    compiled.add(syntaxNode, lineNumbers, lineDimension);
+
                 }
             }
         }
@@ -108,20 +145,28 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
         Debug.Log("Done executing");
     }
 
-    public void execute()
+    public IEnumerator execute()
     {
         //Just test this out first, if runs without errors then work on syncing
-       if (compiled.Compiled)
-        {
-            Debug.Log("saved state of tree");
-            compiled.start();
+        if (compiled == null) ;
 
+        else if (compiled.Compiled)
+        {
+            compiled.start();
+            runningCode = true;
+            while (compiled.nextLine()) {
+                yield return new WaitForSeconds(1.0f);
+
+            }
+            //Now here, instead of run, it will call nextline.
+            runningCode = false;
         }
     }
 
     
     public SyntaxNode constructSyntaxNode(VisualNode e)
     {
+        Debug.Log("Id of currentl constructing node is " + e.ID);
         SyntaxNode node = SyntaxNodeFactory.produce(e.ID);
 
         if (node is BlockNode)
@@ -134,22 +179,24 @@ using DataStructureLanguage.Syntax.SyntaxNodes;
 
                 //Set it's attributes with fields in the operationVisual
                 BlockVisual block = (BlockVisual)e;
-                BinaryOperationVisual condition = (BinaryOperationVisual)block.Head;
+                BinaryOperationVisual condition = (BinaryOperationVisual)block.condition;
                 
                 if (condition == null)
                 {
                     //Throw an exception
                 }
 
-                convertBinaryOperation((BinaryOperationNode)conditionalStatement, (BinaryOperationVisual)e);
+                convertBinaryOperation((BinaryOperationNode)conditionalStatement, (BinaryOperationVisual)condition);
                 ifBlock.SetCondition(conditionalStatement);
             }
 
         }
-        
-        else if (node is BinaryOperationNode)
-        {
+        else if (e is BinaryOperationVisual) {
+
+            if (node is BinaryOperationNode)
+            {
                 convertBinaryOperation((BinaryOperationNode)node, (BinaryOperationVisual)e);
+            }
         }
         
 

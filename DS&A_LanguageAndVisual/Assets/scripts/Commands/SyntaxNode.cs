@@ -14,7 +14,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
         BlockNode scope;
         SyntaxNode left;
         SyntaxNode right;
-
+        public string id;
 
         //event handlers.
         public delegate void ExecutionEvent();
@@ -58,6 +58,10 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
             return parent;
         }
 
+        public void setParent(SyntaxNode parent)
+        {
+            this.parent = parent;
+        }
         public void setLeftChild(SyntaxNode child)
         {
             left = child;
@@ -77,7 +81,11 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes {
         {
             return (BlockNode)right;
         }
+        public void doneExecuting()
+        {
+                OnDoneExecuting();
+        }
 
-       
+
     }
 }

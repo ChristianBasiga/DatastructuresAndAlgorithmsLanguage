@@ -14,7 +14,7 @@ public class BlockVisual : VisualNode {
     
     VisualNode head;
 
-    
+    public BinaryOperationVisual condition;
     //Basically forcing state on these, now when would I reset current? I guess leave that up to develeoper
     //but that's for sure a design flaw.
     VisualNode current;
@@ -29,6 +29,7 @@ public class BlockVisual : VisualNode {
     void Start() {
 
 
+        this.id = label.text;
 
 
         //Set the call backs
@@ -63,22 +64,20 @@ public class BlockVisual : VisualNode {
 
             //Everything I do is same as in base, except position is relative to closing block's position, not the node itself.
             //I may also get rid of the indent here, but that may or may not happen.
-            next.transform.position = closingBlock.transform.position;
-            this.moveDown(next.gameObject);
-            this.moveLeft(next.gameObject);
+            if (next != null && closingBlock != null)
+            {
+                next.transform.position = closingBlock.transform.position;
+                this.moveDown(next.gameObject);
+
+            }
+            //this.moveLeft(next.gameObject);
+
 
         }
         get
         {
-            if (current == null)
-            {
-                //Actully would I end up calling my own Next end up causing recursion, instead of calling base one, we'll see if this works
-                //this definietly something to test in isolation
-                return base.Next;
-            }
 
-            current = current.Next;
-            return current;
+            return base.Next;
         }
      }
 	
@@ -115,6 +114,7 @@ public class BlockVisual : VisualNode {
             head.transform.position = openingBlock.transform.position;
             //Theoritcally should be working, need to make sure.
             this.moveDown(head.gameObject);
+            current = head;
 
             return;
         }
@@ -133,7 +133,7 @@ public class BlockVisual : VisualNode {
         curr.Next = node;
         node.Next = null;
 
-
+        current = head;
       
 
         this.moveDown(closingBlock);
@@ -142,13 +142,26 @@ public class BlockVisual : VisualNode {
 
 
     //Have these already set, just change to nextChild to make explicit
-    public VisualNode nextChild()
+    public VisualNode nextNode()
     {
-        current = current.Next;
-        return current;
+        
+
+        VisualNode prev = current;
+
+        if (current != null)
+        {
+            current = current.Next;
+        }
+        else
+        {
+            //If null then go back to head.
+            current = head;
+        }
+
+        return prev;
     }
 
-    public VisualNode prevChild()
+    public VisualNode prevNode()
     {
         current = current.Prev;
         return current;

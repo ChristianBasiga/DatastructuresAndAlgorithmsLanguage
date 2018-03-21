@@ -11,19 +11,19 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
         }
 
 
-        public new void execute(DataStructureLanguage.Syntax.Util.SyntaxTree programToLookIn)
+        public override void execute(DataStructureLanguage.Syntax.Util.SyntaxTree programToLookIn)
         {
             //Prob best as coroutine tbh
             OnBeginExecuting();
 
-            Variable one, two;
-
+            Variable two;
+            int res;
 
             IsExecuting();
             //Here check if the strings are numeric, if they are then just number, otherwise check for variable name in dictionary.
             try
             {
-                one = DataStructureLanguage.Syntax.Util.UtilMethods.ValidateOperand(firstOperand, programToLookIn);
+                //   one = DataStructureLanguage.Syntax.Util.UtilMethods.ValidateOperand(firstOperand, programToLookIn);
                 two = DataStructureLanguage.Syntax.Util.UtilMethods.ValidateOperand(secondOperand, programToLookIn);
             }
             catch (System.Exception e)
@@ -31,25 +31,25 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
                 throw e;
             }
 
-            //Could make it "literal" instead but eh. Plus then it would make literal be unable to be used as name for a variable
-            if (one.name == null)
+            //That's it for now
+            if (int.TryParse(firstOperand, out res))
             {
+
                 throw new KeyNotFoundException("You cannot assign to a literal");
             }
-            else if (operation == "=")
+            //Two variable doesn't matter if literal or variable
+            if (programToLookIn.variables.ContainsKey(firstOperand))
             {
-                //That's it for now
-                //Two variable doesn't matter if literal or variable
                 programToLookIn.variables[firstOperand].Value = two.Value;
-
-                //Because one is referencing the variable already inside the dictionary.
-                one.Value = two.Value;
             }
-
-            OnDoneExecuting();
+            else
+            {
+                programToLookIn.variables[firstOperand] = new Variable(firstOperand);
+                programToLookIn.variables[firstOperand].Value = two.Value;
+            }
 
         }
 
-      
+
     }
 }

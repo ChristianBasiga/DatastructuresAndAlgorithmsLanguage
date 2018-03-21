@@ -62,6 +62,17 @@ namespace DataStructureLanguage.UserInterface
                         {
                             OnClickedNode(hit.collider.gameObject);
                         }
+                        else
+                        {
+                            if (currentlyClicked != null)
+                            {
+                                if (currentlyClicked.Prev != null)
+                                    currentlyClicked.Prev.Next = null;
+
+                                currentlyClicked.Next = null;
+                                currentlyClicked = null;
+                            }
+                        }
                         /*
                         else if (hit.collider.gameObject.name == "Compile")
                         {
@@ -73,7 +84,15 @@ namespace DataStructureLanguage.UserInterface
                 }
                 else
                 {
-                    currentlyClicked = null;
+                    if (currentlyClicked != null)
+                    {
+                        if (currentlyClicked.Prev != null)
+                            currentlyClicked.Prev.Next = null;
+
+                        currentlyClicked.Next = null;
+
+                        currentlyClicked = null;
+                    }
 
                 }
             }

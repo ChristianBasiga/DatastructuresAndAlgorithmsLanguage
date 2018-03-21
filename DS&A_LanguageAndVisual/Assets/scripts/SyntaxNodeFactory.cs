@@ -8,6 +8,8 @@ public class SyntaxNodeFactory
 
     public static SyntaxNode produce(string type)
     {
+        if (type != null)
+             type = type.ToLower();
 
         //Give default constructor for all of visual nodes.
         if (type == "while")
@@ -16,11 +18,18 @@ public class SyntaxNodeFactory
         }
         else if (type == "if")
         {
+            UnityEngine.Debug.Log("Type constructing is " + type);
+
+
             return new IfNode();
         }
         else if (type == "ifelse")
         {
             return new IfElseNode();
+        }
+        else if (type == "assignment")
+        {
+            return new AssignmentNode();
         }
 
         return new BinaryOperationNode();

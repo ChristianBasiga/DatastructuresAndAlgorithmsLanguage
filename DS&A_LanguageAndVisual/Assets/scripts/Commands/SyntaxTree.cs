@@ -36,30 +36,51 @@ namespace DataStructureLanguage.Syntax.Util
         public SyntaxTree()
         {
             root = new BlockNode();
+            root.id = "root";
         }
 
+        //Start is now set up
         public void start()
         {
             current = root;
 
-            if (current.leftChild() == null)
-            {
-                UnityEngine.Debug.Log("what happened");
-                return;
-            }
+            
             //Cause new program is starting to allocate memory for this program to run.
             variables = new Dictionary<string, Variable>();
             bodies = new Stack<SyntaxNode>();
             bodies.Push(current);
 
+        }
 
+        //This will be running it one go
+        public void run()
+        {
             while (bodies.Count > 0)
             {
                 traverseRight();
             }
         }
 
-        public void add(SyntaxNode node, List<int> bodies, bool forElse = false)
+        //This is for stepping through one at a time, hsa it's use on it's own but main reason right now
+        //is for visual representation, bool for whether or not any more lines left
+        public bool nextLine()
+        {
+
+            //why is it skipping first one
+            if (bodies.Count > 0)
+            {
+
+                current.doneExecuting();
+
+                traverseRight();
+                //Will add this method later
+                return true;
+            }
+          
+            return false;
+        }
+
+        public void add(SyntaxNode node, List<int> bodies, int bodyDimension, bool forElse = false)
         {
             constructed = true;
             if (root == null)
@@ -68,35 +89,42 @@ namespace DataStructureLanguage.Syntax.Util
                 return;
             }
             current = root;
+            SyntaxNode prev = current;
+
             //bodies length is how many bodies deep we wre taking current, with body line being which body we're traversing to, for easier sakes could just say line count instead
             //since gotta traverse everything anyway, instead of checking if has a right node, though I could do that, I'll write it in and try both ways.
-            foreach (int bodyLine in bodies)
+            //That's where I fucked up, only up to line dimensions not all of bodies,
+            //cause not clearing anymore to make more efficient.
+            foreach (int line in bodies)
             {
                 //Then traverse left to that body line, then traverse right, to enter that body, then repeat process to get to correct node.
-                for (int i = 1; i < bodyLine; ++i)
+                //this will go to null point initially, but that's okay, honestly at this point might as well just traverse right
+                //with parameter then left till null, lol.but may want to actually overwrite stuff.
+                for (int i = 0; i < line; ++i)
                 {
+                    prev = current;
 
-                    UnityEngine.Debug.Log("Body line is " + bodyLine);
-                    if (current.leftChild() == null)
-                    {
-                        UnityEngine.Debug.Log("no left child");
-                    }
                     current = current.leftChild();
-                    UnityEngine.Debug.Log("state of tree is " + current);
+
                 }
-                if (current.rightChild() != null)
+
+                if (current != null)
+                {
+                    prev = current;
                     current = current.rightChild();
+                }
             }
 
 
+            
             //Below is just deciding if should go to left or right child, and checking if has an else
             bool toRight = node is BlockNode;
-            UnityEngine.Debug.Log(current == null);
-            SyntaxNode toAttach = current;
+
+            SyntaxNode toAttach = prev;
             //I gotta rethink way I'm doing this part to make else works cause I hate it though it works
-            if (current is IfElseNode && forElse)
+            if (prev is IfElseNode && forElse)
             {
-                IfElseNode ifElse = (IfElseNode)current;
+                IfElseNode ifElse = (IfElseNode)prev;
 
                 if (ifElse.elseBody == null)
                     ifElse.elseBody = node;
@@ -108,19 +136,16 @@ namespace DataStructureLanguage.Syntax.Util
             }
             else
             {
-                UnityEngine.Debug.Log("hello");
-
                 if (toRight)
                 {
                     toAttach.setRightChild((BlockNode)node);
                 }
                 else
-                {
-                    UnityEngine.Debug.Log("adding to left child of root");
-                    UnityEngine.Debug.Log(toAttach == root);
+                { 
                     toAttach.setLeftChild(node);
                 }
             }
+            node.setParent(toAttach);
 
         }
 
@@ -173,44 +198,54 @@ namespace DataStructureLanguage.Syntax.Util
         //This is for executing other statements
         private void traverseLeft()
         {
-            UnityEngine.Debug.Log("traversing left");
-            UnityEngine.Debug.Log(current.leftChild() == null);
+            UnityEngine.Debug.Log("traversing left of " + current.id);
+
             current = current.leftChild();
 
             if (current == null)
             {
                 UnityEngine.Debug.Log("left was null");
 
-                SyntaxNode prev = bodies.Peek();
-                if (prev == null)
+                SyntaxNode currentBody = bodies.Peek();
+                if (currentBody == null)
                 {
                     return;
                 }
 
-                if (prev is IConditional)
+                if (currentBody is IConditional)
                 {
-                    IConditional conditional = (IConditional)prev;
+                    IConditional conditional = (IConditional)currentBody;
 
-                    //Right, it was for this reason, I mean I could just check if it's a loop tbh
-                    //problem with that is it's not easily extendable to more loops, cause I'll have to change this code.
+
+                    //Because I'm always traversing right, so it needs to check the loop again.
                     if (conditional.Type == ConditionalType.LOOP)
-                        current = prev.getParent();
-                   
+                        current = currentBody.getParent();
+                    else
+                    {
+                        currentBody.doneExecuting();
+                        //Hmm I don't want it to traverse right again, and can't just et to left child of parent
+                        //cause no guarantee it's there, plus would mean skipping it, could set to parent, then recur to this,
+                        current = currentBody.getParent();
+                        bodies.Pop();
+                        traverseLeft();
+
+                    }
                 }
                 //If it's not a loop then just goes to left node of parent
                 else
                 {
-                    if (prev != root)
+                    if (currentBody != root)
                     {
-                        current = prev.getParent().leftChild();
+                        current = currentBody.getParent().leftChild();
                     }
                 }
 
-                bodies.Pop();
+                if (bodies.Count > 0)
+                    bodies.Pop();
             }
             else if (current is IExecute)
             {
-                UnityEngine.Debug.Log("hello");
+                UnityEngine.Debug.Log("Executing " + current.id);
                 IExecute executable = (IExecute)current;
                 executable.execute(this);
 

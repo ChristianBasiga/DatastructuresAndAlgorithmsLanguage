@@ -38,7 +38,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
 
             //These event starts only need to be here cause all share same didPass method
             OnBeginExecuting();
-            IsExecuting();
+      //      IsExecuting();
 
             //These meant to be temporary variables just to hold either the number or variable stored in SyntaxTree, and this way I can just move logic to function to avoid
             //duplicate code
@@ -56,7 +56,7 @@ namespace DataStructureLanguage.Syntax.SyntaxNodes
             }
 
 
-            OnDoneExecuting();
+            
 
             //Does actual operation, returning the result. Todo: Do same in assignment node.
             return Operators.logicalOperations[condition.Operation](one, two);
