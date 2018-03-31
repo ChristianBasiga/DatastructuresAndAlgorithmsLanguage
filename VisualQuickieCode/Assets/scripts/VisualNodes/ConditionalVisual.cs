@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/*
 public class ConditionalVisual : BlockVisual {
 
     GameObject conditionBlock;
@@ -30,3 +30,4 @@ public class ConditionalVisual : BlockVisual {
 		
 	}
 }
+*/

@@ -13,6 +13,7 @@ public class VisualNodeOption : MonoBehaviour {
     public int optionNumber;
     //Panel containing preview and create buttons
     public GameObject actionPanel;
+    
 
     public Button menuButton;
 
@@ -46,13 +47,16 @@ public class VisualNodeOption : MonoBehaviour {
 
     void createVisualNode()
     {
+        GameObject spawnPoint = GameObject.Find("spawnpoint");
         GameObject node = Instantiate(referencing, Vector3.zero, Quaternion.identity).gameObject;
 
-        //Not at same position but just at "origin" of canvas probably.
-        node.transform.position = Vector3.zero;//Will set it later
+        GameObject codecanvas = GameObject.Find("CodeCanvas");
+        node.transform.parent = codecanvas.transform;
+        node.transform.localPosition = spawnPoint.transform.localPosition;
         //It needs head, and tail stuff, ut don't think actually needs head to contain all that shiz.
         //node.transform.GetChild(0).gameObject.SetActive(true);
         node.SetActive(true);
+        actionPanel.SetActive(false);
     }
 
     void openPreview()

@@ -15,7 +15,7 @@ namespace DataStructureLanguage.UserInterface
         // Use this for initialization
         void Start()
         {
-            root = transform.GetChild(0).gameObject;
+            root = GameObject.Find("root");
 
             compiler = new Compiler(root.GetComponent<VisualNode>());
 
