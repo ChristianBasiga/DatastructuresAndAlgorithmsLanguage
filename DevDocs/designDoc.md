@@ -1,30 +1,28 @@
-Contents {#contents .TOCHeading}
-========
 
-[Purpose 1](#purpose)
 
-[Core Features 1](#core-features)
+[Purpose](#purpose)
 
-[Stretch Goals 2](#stretch-goals)
+[Core Features](#core-features)
 
-[User Stories 2](#user-stories)
+[Stretch Goals](#stretch-goals)
 
-[Architecture 3](#architecture)
+[User Stories](#user-stories)
 
-[Front End Stack 3](#front-end-stack)
+[Architecture](#architecture)
 
-[Back End Stack 3](#back-end-stack)
+[Front End Stack](#front-end-stack)
 
-[Purpose]{.underline}
-=====================
+[Back End Stack](#back-end-stack)
 
+# Purpose
+-----------------
 Provide a visual interface for creating and seeing the execution of
 short programs for algorithm testing and teaching. The coding is drag
 and drop and the execution displays the flow of the program and what is
 currently happening.
 
-[Core Features]{.underline}
----------------------------
+# Core Features
+-----------------
 
 Running their written Programs.
 
@@ -46,8 +44,8 @@ During
 
 After
 
-[Stretch Goals]{.underline}
----------------------------
+#Stretch Goals
+-----------------
 
 Saving Created Programs
 
@@ -64,16 +62,12 @@ Animations
 
 -   Executing Program
 
-[User Stories]{.underline}
-==========================
+#User Stories
+-----------------
 
 **Action:** User creates a new project.
 
-**//Contemplate if want this extra layer or just functions and all
-functions see other functions,**
 
-**//not scoped to project, because think about the purpose of
-application.**
 
 **Response:** Project Structure is created, has collection of Function
 nodes, and Global Visual Syntax Nodes.
@@ -134,8 +128,8 @@ function by going through Linked List / Array of Function Nodes.
 
 **//To Think about, function calls.**
 
-[Architecture]{.underline}
-==========================
+# Architecture
+-----------------
 
 ### Front End Stack
 
