@@ -2,6 +2,15 @@
 
 # Model Code
 
+*Todo: Figure out how nodes will be passed the variables they are able to access*
+```
+Option:
+Create a scope or context class
+then each block level in, it decorates the previous
+this makes it much easier because when returning it's previous version
+without new local vars.
+
+```
 **Project**
 
     class Project{
@@ -16,7 +25,8 @@
     class Node {
 
     //Has onExec callbacks, probably through streams to give feedback to View.
-    //Has exec method with base implementation of calling the callbacks.
+    //Has exec method with base implementation of calling the callbacks
+    //and returns a promise.
     //Has a next Node
 
     }

@@ -44,7 +44,7 @@ During
 
 After
 
-#Stretch Goals
+# Stretch Goals
 -----------------
 
 Saving Created Programs
@@ -62,71 +62,63 @@ Animations
 
 -   Executing Program
 
-#User Stories
+# User Actions
 -----------------
 
-**Action:** User creates a new project.
+*Create Node*
+1. Open menu with options of Nodes can create.
+
+2. Select Node
+
+3. Open form of respective Node
+
+4. Creates the Visual representation of node, appends to node list of current block.
 
 
+*Move Node*
 
-**Response:** Project Structure is created, has collection of Function
-nodes, and Global Visual Syntax Nodes.
+1. Click and drag
 
-**Action:** User adds a block node. (Function / Conditional Block)
+2. Can only drag across list of nodes in current block.
 
-**Response:**
+3. They are placed in list view.
 
-Function Visual Block Node is created, a composite of Visual Nodes.
+*Create Function*
 
-Local tree of variables created.
+1. Opens form to set parameters and function name.
 
-See variables in outer scope. (By going up the tree)
+2. Then open function window to add nodes to.
 
-**Action:** User adds an Operation Node. (Arithmetic, Comparison,
-Assignment)
+3. Added to list of functions in current project.
 
-**Response:** These are attached to Leaf Nodes attached to direct parent
-composite node, Leaf Nodes are linked list of non-composite / Block
-nodes.
+*Create Project*
+1. Open up form to give project name.
 
-**Action:** User runs the program.
+2. Can set global variables.
 
-**Response:**
+3. Main function created.
 
-***Completing this process with base block and syntax nodes priority 1,
-functions and projects later.***
+4. Opens up to project window.
 
-The composite Visual Nodes enters two phases in separate thread.
+*Run Code*
+1. Open up function window of main.
 
-**Visual Execution Phase**
+2. Iterate through list of nodes, running parse on each one.
 
-Starting off as a background process, it waits for signal from
-Compilation Phase that there is enough to begin executing.
+3. Once parsing is done, begin executing the main function.
 
-When Signal is sent, it begins executing the compiled code and
-displaying corresponding Visuals.
+4. As it runs, callbacks are executed to output to console window, and generate
+a flattened sequence of nodes executed.
 
-**Compilation Phase**
+*Operation Done*
+1. This could be function call, assignment operator, arithmetic, etc.
 
-Another background process with higher priority then Visual Execution
-Phase.
+2. Operands / parameters are parsed using regex to distinguish between identifiers
+and constants / literals.
 
-This compiles the Visual Nodes into respective Syntax Nodes, by climbing
-down the composite tree, and processing Visual Nodes, then Decorating to
-be Executable Visual Nodes.
+3. For identifiers, recursively looks for it up the tree to outer blocks to find first match.
 
-As blocks finish compiling signals are sent to Visual Execution Phase,
-so that these can happen in parallel.
-
-Above might be stretch goal, and will instead just send signal when
-Compilation Phase is done.
-
-**User Action:** Switch Between functions
-
-**Response:** Process swipe left or right, display corresponding
-function by going through Linked List / Array of Function Nodes.
-
-**//To Think about, function calls.**
+4. Parse Operator, then execute accordingly, returning promise of result if any.
 
 # Architecture
 -----------------
@@ -143,6 +135,6 @@ Pub
 
 .Net Core
 
-C\#
+C#
 
 dotnet
