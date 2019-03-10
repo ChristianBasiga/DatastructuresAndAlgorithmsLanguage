@@ -2,8 +2,12 @@
 
  [Controller](#Controller-Code)
 
+ [View](#View)
+
  --------------------------------------
 # Model Code
+This code can be transferred from platform to platform.
+So using bloc here would be good
 
 **Project**
 
@@ -92,3 +96,57 @@
   }
 
 # Controller code
+
+Adding to stream transform parsing from visual node to executable node,
+then attaching callback to visual node on executable.
+
+# View
+
+https://pub.dartlang.org/packages/flutter_reorderable_list
+Nodes will be displayed on reordable list per block.
+Each block will open to it's own screen with it's own list of nodes.
+ie:
+- operation
+- whileLoop condition
+- operation operation
+- operation operation
+- operation
+
+**Project Form**
+
+*Fields*
+
+- name
+- global variables
+
+**Function Form**
+
+*Fields*
+
+- name
+- constant / static variables
+
+
+**Form for each respective Node**
+
+*ConditionalNodes*
+- Condition
+
+*OperationNodes*
+- operands
+- operator
+
+**Project Screen**
+
+- Has list of functions
+- Has list of global variables
+
+**Function Screen**
+
+- Can update fields on function form.
+- Can add nodes like all block screens.
+
+**Conditional Block Screen**
+
+- Can update condition
+- Can add nodes.
