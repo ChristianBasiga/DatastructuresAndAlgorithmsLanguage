@@ -100,6 +100,12 @@ So using bloc here would be good
 Adding to stream transform parsing from visual node to executable node,
 then attaching callback to visual node on executable.
 
+There will be a class that holds all data.
+
+There will be a bloc for every screen, that accesses subsets of model's data that only they need.
+
+Views will go to bloc, bloc will transform for use in data, and transform back for use in view
+
 # View
 
 https://pub.dartlang.org/packages/flutter_reorderable_list
