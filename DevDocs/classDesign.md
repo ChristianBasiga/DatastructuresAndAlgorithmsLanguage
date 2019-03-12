@@ -6,6 +6,10 @@
 
  --------------------------------------
 # Model Code
+
+
+# Need to update this to match redesigns did on paper and in implementation.
+
 This code can be transferred from platform to platform.
 So using bloc here would be good
 
