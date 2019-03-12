@@ -18,6 +18,8 @@ class StatementStatus{
 abstract class StatementNode{
 
   StatementNode _next;
+
+  //Set by the processor.
   Environment env;
 
   StatementStatus status;
@@ -209,6 +211,9 @@ class ConditionalStatement extends BlockStatement{
   void exec(){
 
     onBeginExecuting();
+
+    //Here as well, gotta make sure the wait.
+    //Okay, I get it surface level, if function expression, but what if it's function expr + function expr
     VariableNode condition = conditionalExpression.exec(env);
 
     if (condition.data == "true"){
@@ -224,6 +229,27 @@ class ConditionalStatement extends BlockStatement{
     else{
       _next = continueBlock;
     }
+  }
+}
+
+
+class AssignmentStatement extends StatementNode{
+
+  ExpressionNode rhs;
+  String lhsIdentifier;
+  AssignmentStatement(int id) :super(id);
+
+  @override
+  void exec(){
+
+
+    //Now rhs, can be a function call expression.
+     VariableNode result = rhs.exec(env);
+
+     VariableNode lhs = env.findVar(lhsIdentifier);
+
+     lhs.data = result.data;
+    //Then do find var with identifier, then assign the result as new value.
   }
 }
 

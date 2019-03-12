@@ -3,6 +3,7 @@ library expressions;
 
 import 'environment.dart';
 import 'statements.dart';
+import 'project.dart';
 
 
 abstract class ExpressionNode{
@@ -36,6 +37,11 @@ class BinaryExpression extends ExpressionNode{
     }
 }
 
+
+//This is the unique case.
+
+
+//Really need to document this part specifically, cause raw.
 class FunctionExpression extends ExpressionNode{
 
 
@@ -43,6 +49,7 @@ class FunctionExpression extends ExpressionNode{
   ExpressionNode arguments;
 
   //Easy to implement cause on user end if they change to have return value, then I simply wrap function statement around expression.
+  //So this needs to be ran by another processor, wild.
   FunctionStatement body;
 
 
@@ -50,6 +57,24 @@ class FunctionExpression extends ExpressionNode{
   VariableNode exec(Environment env){
 
     //Do everything in body
+
+
+    //Now, how do I access the main processor's functions
+    //unless static, but it's tied to specific program
+    //unless make statements know what program they're being run on.
+
+    Program program = Program()
+      ..global = env
+      ..main = body
+      //Dirty static, but whatever for now, once get it working, this is something I could think up better design for later without
+      //hopefully without changing too much.
+      ..functionExpressions = Processor.mainProcess.programProcessing.functionExpressions
+      ..functionStatements = Processor.mainProcess.programProcessing.functionStatements;
+
+    //Run and set environment of local function and whatever else.
+    Process()
+      ..programProcessing = program
+      ..exec();
 
     //Then the return statement.
     return returnValue.exec(env);

@@ -1,3 +1,5 @@
+library project;
+
 import 'dart:collection';
 import 'environment.dart';
 import 'statements.dart';
@@ -62,4 +64,12 @@ class Process{
         current = current.next;
     }    
   }
+}
+
+
+//Can run multiple processes.
+//but has one main process;
+class Processor{
+
+  static Process mainProcess;
 }
